@@ -3,6 +3,10 @@ import "./App.css";
 import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
+import ManageArticles from "./pages/ManageArticles";
+import AnalyticsAndReports from "./pages/AnalyticsAndReports";
+import UserManagement from "./pages/UserManagement";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -16,6 +20,42 @@ function App() {
           element={
             // <ProtectedRoute>
             <Dashboard />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          index
+          path="/manage-articles"
+          element={
+            // <ProtectedRoute>
+            <ManageArticles />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          index
+          path="/analytics-reports"
+          element={
+            // <ProtectedRoute>
+            <AnalyticsAndReports />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          index
+          path="/user-management"
+          element={
+            // <ProtectedRoute>
+            <UserManagement />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          index
+          path="/settings"
+          element={
+            // <ProtectedRoute>
+            <Settings />
             // </ProtectedRoute>
           }
         />
