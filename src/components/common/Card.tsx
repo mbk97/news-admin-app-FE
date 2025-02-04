@@ -17,7 +17,7 @@ const Card = ({
 }: IProps) => {
   return (
     <div
-      className="w-[100%] md:w-[300px] h-[160px] rounded-xl p-5"
+      className="w-[100%]  h-[160px] rounded-xl p-5"
       style={{
         background: cardType === "primary" ? "#465FF1" : "white",
         color: cardType === "primary" ? "#ffffff" : "black",
@@ -36,7 +36,7 @@ const Card = ({
           {cardDetails}{" "}
           <span className="font font-normal text-[18px]">+2.8%</span>
         </h3>
-        <FaArrowTrendUp />
+        <FaArrowTrendUp className="text-green-500" />
       </div>
 
       <p className="text-[12px]">{cardSubtitle}</p>

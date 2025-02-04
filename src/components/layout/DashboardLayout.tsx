@@ -18,12 +18,12 @@ const DashboardLayout = ({ children }: IProps) => {
 
   return (
     <div className="flex relative">
-      <div className="w-[0] md:w-[20%]">
+      <div className="w-[0%] lg:w-[20%]">
         <Sidebar open={open} handleClose={handleClose} />
       </div>
-      <div className="p-4 md:p-10">
+      <div className="p-4 md:p-10 lg:w-[80%] w-[100%]">
         <div
-          className="absolute block md:hidden right-3 top-1"
+          className="absolute block lg:hidden right-3 top-1"
           onClick={handleOpen}
         >
           <IoMdMenu size={30} />

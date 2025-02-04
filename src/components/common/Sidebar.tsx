@@ -15,7 +15,7 @@ const Sidebar = ({ open, handleClose }: IProps) => {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: "none", sm: "block" },
+          display: { xs: "none", md: "block" },
           "& .MuiDrawer-paper": {
             width: "20%",
             boxSizing: "border-box",
@@ -68,7 +68,7 @@ const Sidebar = ({ open, handleClose }: IProps) => {
         open={open}
         onClose={handleClose}
         sx={{
-          display: { xs: "block", sm: "none" },
+          display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": { width: "60%", backgroundColor: "#465FF1" },
         }}
       >
