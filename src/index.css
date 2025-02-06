@@ -38,3 +38,11 @@ body {
 /* ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 } */
+
+.cancel_btn {
+  background-color: #77ed77;
+}
+
+.delete_btn {
+  background-color: #fa2b2b;
+}
