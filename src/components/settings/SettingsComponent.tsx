@@ -3,11 +3,11 @@ import HeaderText from "../common/HeaderText";
 import DashboardLayout from "../layout/DashboardLayout";
 import ActivityLog from "./ActivityLog";
 import CategorySettings from "./category/CategorySettings";
-import CommentSettings from "./CommentSettings";
+import ManageRoles from "./roles/ManageRoles";
 import ManagePassword from "./ManagePassword";
 import { TbCategoryFilled } from "react-icons/tb";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { FaComments } from "react-icons/fa6";
+import { FaUserCheck } from "react-icons/fa";
 import { LuActivity } from "react-icons/lu";
 
 const SettingsComponent = () => {
@@ -27,9 +27,9 @@ const SettingsComponent = () => {
     },
     {
       id: 3,
-      title: "Manage Comments",
-      Component: CommentSettings,
-      Icon: FaComments,
+      title: "Manage Roles",
+      Component: ManageRoles,
+      Icon: FaUserCheck,
     },
     {
       id: 4,

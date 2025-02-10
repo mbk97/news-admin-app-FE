@@ -198,3 +198,66 @@ export const trendingNews = [
     image: trend4,
   },
 ];
+
+export const activityLogData = [
+  {
+    fullName: "John Doe",
+    email: "john.doe@example.com",
+    activity: "Logged in",
+    date: "2024-02-07",
+  },
+  {
+    fullName: "Jane Smith",
+    email: "jane.smith@example.com",
+    activity: "Updated profile",
+    date: "2024-02-06",
+  },
+  {
+    fullName: "Michael Brown",
+    email: "michael.brown@example.com",
+    activity: "Changed password",
+    date: "2024-02-05",
+  },
+  {
+    fullName: "Emily Johnson",
+    email: "emily.johnson@example.com",
+    activity: "Logged out",
+    date: "2024-02-04",
+  },
+  {
+    fullName: "Chris Wilson",
+    email: "chris.wilson@example.com",
+    activity: "Uploaded document",
+    date: "2024-02-03",
+  },
+  {
+    fullName: "Sarah Miller",
+    email: "sarah.miller@example.com",
+    activity: "Deleted account",
+    date: "2024-02-02",
+  },
+  {
+    fullName: "David Lee",
+    email: "david.lee@example.com",
+    activity: "Logged in",
+    date: "2024-02-01",
+  },
+  {
+    fullName: "Anna White",
+    email: "anna.white@example.com",
+    activity: "Updated settings",
+    date: "2024-01-31",
+  },
+  {
+    fullName: "James Harris",
+    email: "james.harris@example.com",
+    activity: "Made a purchase",
+    date: "2024-01-30",
+  },
+  {
+    fullName: "Olivia Martinez",
+    email: "olivia.martinez@example.com",
+    activity: "Subscribed to newsletter",
+    date: "2024-01-29",
+  },
+];
