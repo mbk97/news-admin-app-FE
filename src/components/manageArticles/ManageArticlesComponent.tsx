@@ -8,11 +8,30 @@ import { IconButton, Tooltip } from "@mui/material";
 import { IoMdEye } from "react-icons/io";
 import CustomTable from "../common/CustomTable";
 import { newsData } from "../../utils/data";
+import CreateArticles from "./CreateArticles";
+import ViewBlogDetails from "./ViewBlogDetails";
+import CustomDrawer from "../common/CustomDrawer";
+import { MdDelete } from "react-icons/md";
+import { Modal } from "../common/Modal";
+import DeleteBlog from "./DeleteBlog";
+import PublishBlog from "./PublishBlog";
+import { MdPublish } from "react-icons/md";
 
 const ManageArticlesComponent = () => {
-  const [openViewMore, setOpenViewMore] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
+  const [openViewMore, setOpenViewMore] = useState<boolean>(false);
+  const [openCreate, setOpenCreate] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openPublish, setOpenPublish] = useState<boolean>(false);
   const [viewMoreData, setOpenViewMoreData] = useState({});
+
+  const handleOpenPublish = (data: any) => {
+    setOpenPublish(true);
+    setOpenViewMoreData(data);
+  };
+
+  const handleClosePublish = () => {
+    setOpenPublish(false);
+  };
 
   const handleOpenViewMore = (data: any) => {
     setOpenViewMore(true);
@@ -26,6 +45,13 @@ const ManageArticlesComponent = () => {
   };
   const handleCloseCreate = () => {
     setOpenCreate(false);
+  };
+  const handleOpenDelete = (data: any) => {
+    setOpenDelete(true);
+    setOpenViewMoreData(data);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   const column = [
@@ -56,7 +82,25 @@ const ManageArticlesComponent = () => {
             }}
           >
             <Tooltip title="Edit User" arrow>
-              <IoMdEye />
+              <IoMdEye className="primary" />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleOpenDelete(value.cell.row.original);
+            }}
+          >
+            <Tooltip title="Edit User" arrow>
+              <MdDelete className="danger" />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleOpenPublish(value.cell.row.original);
+            }}
+          >
+            <Tooltip title="Publish" arrow>
+              <MdPublish className="green" />
             </Tooltip>
           </IconButton>
         </div>
@@ -136,16 +180,29 @@ const ManageArticlesComponent = () => {
           width="md"
           handleClose={handleCloseCreate}
         >
-          <h1>Create Blog</h1>
+          <CreateArticles />
         </CustomModal>
-        <CustomModal
+        <CustomDrawer
           open={openViewMore}
-          dialogTitle="View Blog Details"
-          width="md"
           handleClose={handleCloseViewMore}
+          drawerTitle="View More"
         >
-          <h1>View Blog Details</h1>
-        </CustomModal>
+          <ViewBlogDetails data={viewMoreData} />
+        </CustomDrawer>
+
+        <Modal isOpen={openDelete} onClose={handleCloseDelete}>
+          <DeleteBlog
+            data={viewMoreData}
+            handleCloseDelete={handleCloseDelete}
+          />
+        </Modal>
+
+        <Modal isOpen={openPublish} onClose={handleClosePublish}>
+          <PublishBlog
+            data={viewMoreData}
+            handleClosePublish={handleClosePublish}
+          />
+        </Modal>
       </DashboardLayout>
     </div>
   );

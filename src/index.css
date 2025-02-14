@@ -18,3 +18,43 @@ body {
   background-position: center;
   background-size: cover;
 }
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px; /* Adjust width */
+}
+
+::-webkit-scrollbar-track {
+  background: #f7f8fb; /* Track background */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #465ff1; /* Thumb color */
+  border-radius: 10px;
+}
+
+/* Darker on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+} */
+
+.cancel_btn {
+  background-color: #77ed77;
+}
+
+.delete_btn {
+  background-color: #fa2b2b;
+}
+
+.green {
+  color: #77ed77;
+}
+
+.danger {
+  color: #fa2b2b;
+}
+
+.primary {
+  color: #465ff1;
+}
