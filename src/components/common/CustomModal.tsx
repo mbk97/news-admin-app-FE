@@ -1,7 +1,6 @@
 import { Dialog, DialogTitle, IconButton } from "@mui/material";
 import { Breakpoint } from "@mui/system";
 import { MdOutlineClose } from "react-icons/md";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface IModalProps {
   open: boolean;

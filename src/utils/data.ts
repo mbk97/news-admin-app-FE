@@ -11,7 +11,7 @@ import trend1 from "../assets/images/trend_img1.jpg";
 import trend2 from "../assets/images/trend_img2.jpg";
 import trend3 from "../assets/images/trend_img3.jpg";
 import trend4 from "../assets/images/trend_img4.jpg";
-import trend5 from "../assets/images/trend_img5.jpg";
+// import trend5 from "../assets/images/trend_img5.jpg";
 
 export const sidebarData: ISidebarTypes[] = [
   {

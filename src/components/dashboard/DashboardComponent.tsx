@@ -10,6 +10,7 @@ import CustomModal from "../common/CustomModal";
 
 const DashboardComponent = () => {
   const [viewMoreData, setViewMoreData] = useState({});
+  console.log(viewMoreData);
   const [open, setOpen] = useState(false);
 
   const handleOpenViewMore = (data: any) => {

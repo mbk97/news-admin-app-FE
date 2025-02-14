@@ -6,6 +6,7 @@ interface IDeleteProps {
 }
 
 const DeleteBlog = ({ data, handleCloseDelete }: IDeleteProps) => {
+  console.log(data);
   return (
     <div className="flex items-center justify-center flex-col h-[100%]">
       <p>Are you sure you want to delete this blog?</p>
