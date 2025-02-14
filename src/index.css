@@ -46,3 +46,15 @@ body {
 .delete_btn {
   background-color: #fa2b2b;
 }
+
+.green {
+  color: #77ed77;
+}
+
+.danger {
+  color: #fa2b2b;
+}
+
+.primary {
+  color: #465ff1;
+}

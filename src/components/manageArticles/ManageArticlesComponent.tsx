@@ -14,12 +14,24 @@ import CustomDrawer from "../common/CustomDrawer";
 import { MdDelete } from "react-icons/md";
 import { Modal } from "../common/Modal";
 import DeleteBlog from "./DeleteBlog";
+import PublishBlog from "./PublishBlog";
+import { MdPublish } from "react-icons/md";
 
 const ManageArticlesComponent = () => {
   const [openViewMore, setOpenViewMore] = useState<boolean>(false);
   const [openCreate, setOpenCreate] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openPublish, setOpenPublish] = useState<boolean>(false);
   const [viewMoreData, setOpenViewMoreData] = useState({});
+
+  const handleOpenPublish = (data: any) => {
+    setOpenPublish(true);
+    setOpenViewMoreData(data);
+  };
+
+  const handleClosePublish = () => {
+    setOpenPublish(false);
+  };
 
   const handleOpenViewMore = (data: any) => {
     setOpenViewMore(true);
@@ -70,7 +82,7 @@ const ManageArticlesComponent = () => {
             }}
           >
             <Tooltip title="Edit User" arrow>
-              <IoMdEye />
+              <IoMdEye className="primary" />
             </Tooltip>
           </IconButton>
           <IconButton
@@ -79,7 +91,16 @@ const ManageArticlesComponent = () => {
             }}
           >
             <Tooltip title="Edit User" arrow>
-              <MdDelete />
+              <MdDelete className="danger" />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleOpenPublish(value.cell.row.original);
+            }}
+          >
+            <Tooltip title="Publish" arrow>
+              <MdPublish className="green" />
             </Tooltip>
           </IconButton>
         </div>
@@ -173,6 +194,13 @@ const ManageArticlesComponent = () => {
           <DeleteBlog
             data={viewMoreData}
             handleCloseDelete={handleCloseDelete}
+          />
+        </Modal>
+
+        <Modal isOpen={openPublish} onClose={handleClosePublish}>
+          <PublishBlog
+            data={viewMoreData}
+            handleClosePublish={handleClosePublish}
           />
         </Modal>
       </DashboardLayout>

@@ -261,3 +261,129 @@ export const activityLogData = [
     date: "2024-01-29",
   },
 ];
+
+export const userTableData = [
+  {
+    fullName: "John Doe",
+    email: "john.doe@example.com",
+    lastSeen: "2024-02-10 14:35",
+    role: "Admin",
+  },
+  {
+    fullName: "Jane Smith",
+    email: "jane.smith@example.com",
+    lastSeen: "2024-02-09 10:20",
+    role: "Author",
+  },
+  {
+    fullName: "Michael Johnson",
+    email: "michael.johnson@example.com",
+    lastSeen: "2024-02-08 16:45",
+    role: "Editor",
+  },
+  {
+    fullName: "Emily Brown",
+    email: "emily.brown@example.com",
+    lastSeen: "2024-02-07 08:10",
+    role: "Editor",
+  },
+  {
+    fullName: "Daniel Wilson",
+    email: "daniel.wilson@example.com",
+    lastSeen: "2024-02-06 19:30",
+    role: "Admin",
+  },
+  {
+    fullName: "Sophia Martinez",
+    email: "sophia.martinez@example.com",
+    lastSeen: "2024-02-05 12:50",
+    role: "Author",
+  },
+  {
+    fullName: "James Anderson",
+    email: "james.anderson@example.com",
+    lastSeen: "2024-02-04 09:15",
+    role: "Author",
+  },
+  {
+    fullName: "Olivia Taylor",
+    email: "olivia.taylor@example.com",
+    lastSeen: "2024-02-03 17:05",
+    role: "Author",
+  },
+  {
+    fullName: "William Thomas",
+    email: "william.thomas@example.com",
+    lastSeen: "2024-02-02 21:40",
+    role: "Editor",
+  },
+  {
+    fullName: "Ava Hernandez",
+    email: "ava.hernandez@example.com",
+    lastSeen: "2024-02-01 06:25",
+    role: "Editor",
+  },
+];
+
+export const analyticsData = [
+  {
+    newsTitle: "Breaking News: Tech Innovation",
+    category: "Technology",
+    views: 1200,
+    dateCreated: "2024-02-14",
+  },
+  {
+    newsTitle: "Global Markets Surge",
+    category: "Finance",
+    views: 950,
+    dateCreated: "2024-02-13",
+  },
+  {
+    newsTitle: "Sports Championship Highlights",
+    category: "Sports",
+    views: 1800,
+    dateCreated: "2024-02-12",
+  },
+  {
+    newsTitle: "New Movie Release",
+    category: "Entertainment",
+    views: 700,
+    dateCreated: "2024-02-11",
+  },
+  {
+    newsTitle: "Health Benefits of Yoga",
+    category: "Health",
+    views: 500,
+    dateCreated: "2024-02-10",
+  },
+  {
+    newsTitle: "Political Debate: Election 2024",
+    category: "Politics",
+    views: 1600,
+    dateCreated: "2024-02-09",
+  },
+  {
+    newsTitle: "AI Breakthrough in Medicine",
+    category: "Technology",
+    views: 2100,
+    dateCreated: "2024-02-08",
+  },
+  {
+    newsTitle: "Cryptocurrency Market Crash",
+    category: "Finance",
+    views: 3400,
+    dateCreated: "2024-02-07",
+  },
+  {
+    newsTitle: "Celebrity Scandal Shocks Fans",
+    category: "Entertainment",
+    views: 2750,
+    dateCreated: "2024-02-06",
+  },
+  {
+    newsTitle: "Extreme Weather Alert Issued",
+    category: "Weather",
+    views: 1900,
+    dateCreated: "2024-02-05",
+  },
+];
