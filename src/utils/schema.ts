@@ -9,3 +9,12 @@ export const updatePasswordSchema = Yup.object().shape({
   currentPassword: Yup.string().required("Password is required").min(5),
   newPassword: Yup.string().required("Password is required").min(8),
 });
+export const resetPasswordSchema = Yup.object().shape({
+  email: Yup.string().email().required("Email is required"),
+});
+
+export const registerUserSchema = Yup.object().shape({
+  email: Yup.string().email().required("Email is required"),
+  fullname: Yup.string().required("Full Name is required").min(5),
+  roleName: Yup.string().required("Role Name is required"),
+});

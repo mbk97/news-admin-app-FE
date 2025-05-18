@@ -4,3 +4,15 @@ export interface ISidebarTypes {
   Icon: any;
   link: string;
 }
+
+export interface IRoles {
+  _id: string;
+  roleName: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: 0;
+}
+
+export interface IUser {
+  _id: string;
+}

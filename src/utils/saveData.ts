@@ -1,10 +1,10 @@
-export const saveUserDetails = (name: string, data: any): void => {
-  if (typeof window !== "undefined") {
+export const saveUserDetails = <T>(name: string, data: T): void => {
+  if (typeof window !== 'undefined') {
     try {
       const jsonData = JSON.stringify(data);
       localStorage.setItem(name, jsonData);
     } catch (error) {
-      console.error("Error saving user details to localStorage:", error);
+      console.error('Error saving user details to localStorage:', error);
     }
   }
 };

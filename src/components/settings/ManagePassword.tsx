@@ -1,18 +1,31 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikProps,
+} from "formik";
 import { CustomButton } from "../common/CustomButton";
 import CustomInput from "../common/CustomInput";
 import HeaderText from "../common/HeaderText";
 import { IUpdatePassword } from "../../types/auth";
 import { updatePasswordSchema } from "../../utils/schema";
+import { useUserAuth } from "../../services/auth/auth";
 
 const ManagePassword = () => {
+  const { updatePasswordMutation } = useUserAuth();
+  const { isPending, mutate } = updatePasswordMutation;
+
   const userData = {
     email: "",
     currentPassword: "",
     newPassword: "",
   };
 
-  const handleSubmit = (values: IUpdatePassword) => {};
+  const handleSubmit = (values: IUpdatePassword) => {
+    mutate(values);
+  };
 
   return (
     <div>
@@ -23,11 +36,11 @@ const ManagePassword = () => {
           validationSchema={updatePasswordSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleChange }: any) => (
+          {({ handleChange }: FormikProps<IUpdatePassword>) => (
             <Form>
               <div className="lg:w-[60%] md:w-[70%] w-[100%]">
                 <Field name="email">
-                  {({ field }: any) => (
+                  {({ field }: FieldProps) => (
                     <div className="relative mb-4">
                       <CustomInput
                         labelStyle="text-sm font-medium"
@@ -49,13 +62,13 @@ const ManagePassword = () => {
               </div>
               <div className="lg:w-[60%] md:w-[70%] w-[100%]  mt-5">
                 <Field name="currentPassword">
-                  {({ field }: any) => (
+                  {({ field }: FieldProps) => (
                     <div className="relative mb-4">
                       <CustomInput
                         labelStyle="text-sm font-medium"
                         type="text"
-                        name={field.currentPassword}
-                        value={field.currentPassword}
+                        name={field.name}
+                        value={field.value}
                         handleChange={handleChange}
                         placeholder="Enter Current Password"
                         label="Enter Current Password"
@@ -71,13 +84,13 @@ const ManagePassword = () => {
               </div>
               <div className="lg:w-[60%] md:w-[70%] w-[100%] mt-5">
                 <Field name="newPassword">
-                  {({ field }: any) => (
+                  {({ field }: FieldProps) => (
                     <div className="relative mb-4">
                       <CustomInput
                         labelStyle="text-sm font-medium"
                         type="text"
-                        name={field.newPassword}
-                        value={field.newPassword}
+                        name={field.name}
+                        value={field.value}
                         handleChange={handleChange}
                         placeholder="Enter New Password"
                         label="Enter New Password"
@@ -92,7 +105,11 @@ const ManagePassword = () => {
                 />
               </div>
               <div className="lg:w-[60%] md:w-[70%] w-[100%] mt-8">
-                <CustomButton text="Change Password" />
+                <CustomButton
+                  text="Change Password"
+                  isLoading={isPending}
+                  disabled={isPending}
+                />
               </div>
             </Form>
           )}

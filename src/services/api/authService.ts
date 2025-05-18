@@ -6,7 +6,7 @@ export const authService = {
     apiClient.post("/news-app-auth/login", payload),
 
   forgotPassword: (email: string) =>
-    apiClient.post("/news-app-auth/forgot-password", { email }),
+    apiClient.post("/news-app-auth/reset-password", { email }),
 
   updatePassword: (payload: IUpdatePassword) =>
     apiClient.post("/news-app-auth/change-password", payload),

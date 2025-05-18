@@ -1,32 +1,47 @@
-import { useToasts } from "react-toast-notifications";
+import toast from "react-hot-toast";
 
 const useToast = () => {
-  const { addToast } = useToasts();
-
   function toastSuccess(message: string) {
-    addToast(`${message}!`, {
-      appearance: "success",
-      autoDismiss: true,
-      autoDismissTimeout: 3000,
-      placement: "top-center",
+    toast.success(`${message}!`, {
+      icon: "👏",
+      duration: 3000,
+      position: "top-center",
+      style: {
+        border: "1px solid green",
+        padding: "12px",
+        color: "white",
+        background: "green",
+      },
+      iconTheme: {
+        primary: "white",
+        secondary: "white",
+      },
     });
   }
 
   function toastError(message: string) {
-    addToast(`${message}!`, {
-      appearance: "error",
-      autoDismiss: true,
-      autoDismissTimeout: 3000,
-      placement: "top-center",
+    toast.error(`${message}!`, {
+      icon: "❌",
+      duration: 3000,
+      position: "top-center",
+      style: {
+        border: "1px solid red",
+        padding: "12px",
+        color: "white",
+        background: "red",
+      },
+      iconTheme: {
+        primary: "white",
+        secondary: "white",
+      },
     });
   }
 
   function toastInfo(message: string) {
-    addToast(`${message}`, {
-      appearance: "info",
-      autoDismiss: true,
-      autoDismissTimeout: 3000,
-      placement: "top-center",
+    toast(`${message}`, {
+      //   icon: "ℹ️",
+      duration: 3000,
+      position: "top-center",
     });
   }
 

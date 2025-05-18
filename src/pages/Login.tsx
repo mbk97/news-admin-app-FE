@@ -1,36 +1,27 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CustomButton } from "../components/common/CustomButton";
 import CustomInput from "../components/common/CustomInput";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldProps, FormikProps } from "formik";
 import AuthLayout from "../components/layout/AuthLayout";
-import { useUserAuth } from "../services/auth/auth";
 import { validationSchema } from "../utils/schema";
-import { useToast } from "../hooks/useToast";
-import { ILoginPayload } from "../types/auth";
+import { useUserAuth } from "../services/auth/auth";
+
+interface FormValues{
+  email: string;
+  password:string
+}
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { toastSuccess } = useToast();
-  const { loginUserMutation } = useUserAuth();
-  const { mutate, isPending } = loginUserMutation;
+  const {loginUserMutation} = useUserAuth()
 
+  const {mutate, isPending} = loginUserMutation
   const userData = {
     email: "",
     password: "",
   };
 
-  const handleSubmit = (values: ILoginPayload) => {
-    mutate(values, {
-      onSuccess(data: any) {
-        if (data?.data?.success === true) {
-          toastSuccess("Login Successful");
-          navigate("/dashboard");
-        }
-      },
-      onError(error) {
-        console.log(error);
-      },
-    });
+  const handleSubmit = (values:FormValues) => {
+    mutate(values)
   };
 
   return (
@@ -40,11 +31,11 @@ const Login = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ handleChange }: any) => (
+        {({ handleChange }:FormikProps<FormValues>) => (
           <Form className="w-[100%] flex  flex-col justify-center items-center">
             <div className="mt-5 lg:w-[50%] w-[80%]">
               <Field name="email">
-                {({ field }: any) => (
+                {({ field }: FieldProps) => (
                   <div className="relative mb-4">
                     <CustomInput
                       labelStyle="text-sm font-medium"
@@ -66,7 +57,7 @@ const Login = () => {
             </div>
             <div className="mt-5 w-[80%] lg:w-[50%]">
               <Field name="password">
-                {({ field }: any) => (
+                {({ field }: FieldProps) => (
                   <div className="relative mb-1">
                     <CustomInput
                       labelStyle="text-sm font-medium"
@@ -86,7 +77,7 @@ const Login = () => {
                 className="text-error text-sm"
               />
 
-              <div className="flex justify-end mt-0">
+              <div className="flex justify-end">
                 <Link to={"/forgot-password"}>
                   <p className="text-[12px]  underline text-primary cursor-pointer">
                     Forgot Password?
@@ -94,13 +85,9 @@ const Login = () => {
                 </Link>
               </div>
             </div>
+
             <div className="mt-7 w-[80%] lg:w-[50%]">
-              <CustomButton
-                text="Login"
-                isLoading={isPending}
-                disabled={isPending}
-                pageBtn="login"
-              />
+              <CustomButton text="Login" isLoading={isPending} disabled={isPending}/>
             </div>
           </Form>
         )}
