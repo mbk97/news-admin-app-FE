@@ -9,6 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useAnalyticsData } from "../../services/analytics/analytics";
+import { ChartLoader } from "../loaders";
 
 ChartJS.register(
   CategoryScale,
@@ -17,10 +19,21 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const MonthlyAnalytics = () => {
+  const { getMontlyViews } = useAnalyticsData();
+  const { data: monthlyData, isPending } = getMontlyViews;
+
+  // Extract month names and view counts from API response
+  const months = monthlyData?.data?.data[0]?.months || [];
+  const viewCounts = months.map(
+    (month: { totalViews: number[] }) => month.totalViews
+  );
+
+  console.log(viewCounts);
+
   const data = {
     labels: [
       "JAN",
@@ -39,17 +52,15 @@ const MonthlyAnalytics = () => {
     datasets: [
       {
         label: "Monthly Views",
-        // data: customerCount,
-        data: [300, 388, 100, 170, 200, 10, 200, 230, 190, 179, 223, 109],
+        data: viewCounts.length ? viewCounts : [],
         borderColor: "#1C64F2",
-        pointRadius: 5, // Hide the points
+        pointRadius: 5,
       },
       {
         label: "",
-        // data: defectCount,
         data: [],
         borderColor: "",
-        pointRadius: 5, // Hide the points
+        pointRadius: 5,
       },
     ],
   };
@@ -69,8 +80,8 @@ const MonthlyAnalytics = () => {
         border: {
           display: false,
         },
-        min: 100,
-        max: 600,
+        min: 0,
+        max: 100,
         ticks: {
           stepSize: 20,
           padding: 30,
@@ -96,7 +107,7 @@ const MonthlyAnalytics = () => {
         <h2 className="text-[20px] font-bold leading-6 text-primary">
           Monthly views
         </h2>
-        <Line data={data} options={options} />
+        {isPending ? <ChartLoader /> : <Line data={data} options={options} />}
       </div>
     </div>
   );

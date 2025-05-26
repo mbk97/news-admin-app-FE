@@ -1,11 +1,17 @@
+import { useAnalyticsData } from "../../services/analytics/analytics";
 import { analyticsData } from "../../utils/data";
+import { formatDate } from "../../utils/date";
 import CustomTable from "../common/CustomTable";
 import HeaderText from "../common/HeaderText";
 import DashboardLayout from "../layout/DashboardLayout";
+import { TableLoader } from "../loaders";
 import MonthlyAnalytics from "./Analytics";
 import CategoryDoughnutChart from "./CategoryChart";
 
 const AnalyticsAndReportsComponent = () => {
+  const { getTopPerformingNews } = useAnalyticsData();
+  const { data: perfomingNewsData, isPending } = getTopPerformingNews;
+
   const column = [
     {
       Header: "News Title",
@@ -20,8 +26,13 @@ const AnalyticsAndReportsComponent = () => {
       accessor: "views",
     },
     {
+      Header: "Created By",
+      accessor: "createdBy",
+    },
+    {
       Header: "Date Created",
-      accessor: "dateCreated",
+      accessor: "createdAt",
+      Cell: ({ value }: { value: string }) => formatDate(value),
     },
   ];
 
@@ -44,7 +55,14 @@ const AnalyticsAndReportsComponent = () => {
         </section>
         <section className="mt-8  bg-white rounded-md p-5">
           <HeaderText text="Top Performing Posts" />
-          <CustomTable columns={column} data={analyticsData} />
+          {isPending ? (
+            <TableLoader />
+          ) : (
+            <CustomTable
+              columns={column}
+              data={perfomingNewsData ?? analyticsData}
+            />
+          )}
         </section>
       </DashboardLayout>
     </div>

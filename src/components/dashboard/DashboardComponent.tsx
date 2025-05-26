@@ -1,5 +1,5 @@
-import { FaSearch } from "react-icons/fa";
-import { cardData, newsData, trendingNews } from "../../utils/data";
+import { FaHourglassEnd, FaRegEye, FaSearch, FaUsers } from "react-icons/fa";
+import { newsData, trendingNews } from "../../utils/data";
 import Card from "../common/Card";
 import React, { useState } from "react";
 import user from "../../assets/images/user.jpg";
@@ -7,6 +7,11 @@ import { IoMdEye, IoMdNotifications } from "react-icons/io";
 import CustomTable from "../common/CustomTable";
 import { IconButton, Tooltip } from "@mui/material";
 import CustomModal from "../common/CustomModal";
+import { useAnalyticsData } from "../../services/analytics/analytics";
+import { PiArticleNyTimesBold } from "react-icons/pi";
+import { CardLoader, TableLoader, TrendingNewsLoader } from "../loaders";
+import { useNews } from "../../services/news/news";
+import { formatDate } from "../../utils/date";
 
 const DashboardComponent = () => {
   const [viewMoreData, setViewMoreData] = useState({});
@@ -18,6 +23,20 @@ const DashboardComponent = () => {
     setOpen(true);
   };
 
+  const { getDashboardStatsData, getTopPerformingNews } = useAnalyticsData();
+  const { getRecentNewsForDashboard } = useNews({});
+  const { data: perfomingNewsData, isPending: perfomingNewsPending } =
+    getTopPerformingNews;
+  const { data: dashboardStats, isPending } = getDashboardStatsData;
+  const { data: recentNews, isPending: isNewsPending } =
+    getRecentNewsForDashboard;
+
+  const performingNewsResult = perfomingNewsData?.filter(
+    (news: { views: number }) => {
+      return news?.views > 0;
+    }
+  );
+  console.log(performingNewsResult);
   const handleClose = () => setOpen(false);
 
   const column = [
@@ -36,6 +55,7 @@ const DashboardComponent = () => {
     {
       Header: "Date Created",
       accessor: "createdAt",
+      Cell: ({ value }: { value: string }) => formatDate(value),
     },
     {
       Header: "Action",
@@ -53,6 +73,48 @@ const DashboardComponent = () => {
           </IconButton>
         </div>
       ),
+    },
+  ];
+
+  // totalArticles: 6;
+  // totalAuthors: 2;
+  // totalViews: 32;
+  // unpublishedArticles;
+
+  const cardData = [
+    {
+      id: 1,
+      cardTitle: "Total Views",
+      cardDetails: dashboardStats?.totalViews,
+      CardIcon: FaRegEye,
+      cardSubtitle: "Compared to (200k last month)",
+      cardType: "primary",
+    },
+
+    {
+      id: 2,
+      cardTitle: "Total Articles",
+      cardDetails: dashboardStats?.totalArticles,
+      CardIcon: PiArticleNyTimesBold,
+      cardSubtitle: "",
+      cardType: "",
+    },
+
+    {
+      id: 3,
+      cardTitle: "Active Authors",
+      cardDetails: dashboardStats?.totalAuthors,
+      CardIcon: FaUsers,
+      cardSubtitle: "",
+      cardType: "",
+    },
+    {
+      id: 4,
+      cardTitle: "Pending Approvals",
+      cardDetails: dashboardStats?.unpublishedArticles?.length,
+      CardIcon: FaHourglassEnd,
+      cardSubtitle: "",
+      cardType: "",
     },
   ];
 
@@ -96,19 +158,28 @@ const DashboardComponent = () => {
           </section>
         </div>
         <section className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 gap-4">
-          {/* <div className="flex gap-3 flex-wrap md:flex-nowrap"> */}
-          {cardData.map((card) => {
-            return (
-              <Card
-                key={card.id}
-                cardDetails={card.cardDetails}
-                CardIcon={card.CardIcon}
-                cardSubtitle={card.cardSubtitle}
-                cardTitle={card.cardTitle}
-                cardType={card.cardType}
-              />
-            );
-          })}
+          {isPending ? (
+            <>
+              {Array(4)
+                .fill(0)
+                .map((_, index) => (
+                  <CardLoader key={`loader-${index}`} />
+                ))}
+            </>
+          ) : (
+            cardData.map((card) => {
+              return (
+                <Card
+                  key={card.id}
+                  cardDetails={card.cardDetails}
+                  CardIcon={card.CardIcon}
+                  cardSubtitle={card.cardSubtitle}
+                  cardTitle={card.cardTitle}
+                  cardType={card.cardType}
+                />
+              );
+            })
+          )}
         </section>
         <div className="my-[30px]">
           <section className="flex gap-6 mt-2 flex-wrap md:flex-nowrap">
@@ -116,54 +187,70 @@ const DashboardComponent = () => {
               <h2 className="font-semibold text-[18px]">
                 Recently Created News
               </h2>
-              <CustomTable columns={column} data={newsData} />
+              {isNewsPending ? (
+                <TableLoader />
+              ) : (
+                <CustomTable columns={column} data={recentNews ?? []} />
+              )}
             </div>
             <div className="md:w-[25%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
               <h2 className="font-semibold text-[18px]">Trending News</h2>
 
               <div>
-                {trendingNews.map((trend, index) => {
-                  return (
-                    <div
-                      className="h-[90px] w-[100%] shadow-md border rounded-md p-1 mb-5 mt-3 gap-3"
-                      key={index}
-                    >
-                      <section className="flex gap-3">
-                        <div>
-                          <img
-                            src={trend.image}
-                            className="rounded-[50%] border h-[70px] object-center w-[80px]"
-                          />
+                {perfomingNewsPending ? (
+                  <TrendingNewsLoader />
+                ) : (
+                  performingNewsResult?.map(
+                    (trend: {
+                      _id: string;
+                      newsImage: string;
+                      newsTitle: string;
+                      category: string;
+                      views: number;
+                    }) => {
+                      return (
+                        <div
+                          className="h-[90px] w-[100%] shadow-md border rounded-md p-1 mb-5 mt-3 gap-3"
+                          key={trend._id}
+                        >
+                          <section className="flex gap-3">
+                            <div>
+                              <img
+                                src={trend.newsImage}
+                                className="rounded-[50%] border h-[70px] object-center w-[80px]"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-[12px] font-semibold">
+                                <p>
+                                  {trend.newsTitle.length > 30
+                                    ? trend.newsTitle.substring(0, 30) + "..."
+                                    : trend.newsTitle}
+                                </p>
+                              </p>
+                              <div>
+                                <p className="text-[12px] text-gray-500 mt-2">
+                                  <span className="text-black font-semibold">
+                                    {" "}
+                                    Category:{" "}
+                                  </span>{" "}
+                                  {trend.category}
+                                </p>
+                                <p className="text-[12px] text-gray-500 ">
+                                  <span className="text-black font-semibold">
+                                    {" "}
+                                    Total Views:{" "}
+                                  </span>{" "}
+                                  {trend.views.toLocaleString()}
+                                </p>
+                              </div>
+                            </div>
+                          </section>
                         </div>
-                        <div>
-                          <p className="text-[12px] font-semibold">
-                            <p>
-                              {trend.title.length > 30
-                                ? trend.title.substring(0, 30) + "..."
-                                : trend.title}
-                            </p>
-                          </p>
-                          <div>
-                            <p className="text-[12px] text-gray-500 mt-2">
-                              <span className="text-black font-semibold">
-                                {" "}
-                                Category:{" "}
-                              </span>{" "}
-                              {trend.category}
-                            </p>
-                            <p className="text-[12px] text-gray-500 ">
-                              <span className="text-black font-semibold">
-                                {" "}
-                                Total Views:{" "}
-                              </span>{" "}
-                              {trend.reads.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-                      </section>
-                    </div>
-                  );
-                })}
+                      );
+                    }
+                  )
+                )}
               </div>
             </div>
           </section>

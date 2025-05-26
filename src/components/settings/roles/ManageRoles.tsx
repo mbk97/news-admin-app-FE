@@ -29,6 +29,7 @@ const ManageRoles = () => {
   };
   const handleCloseViewRoleDetails = () => {
     setOpenViewRoleDetails(false);
+    setRoleDetails(undefined);
   };
 
   const rolesData = data?.data?.data;
@@ -75,7 +76,7 @@ const ManageRoles = () => {
       </section>
 
       <Modal isOpen={open} onClose={handleCloseAddRole}>
-        <AddNewRole />
+        <AddNewRole handleClose={handleCloseAddRole} />
       </Modal>
 
       <CustomDrawer

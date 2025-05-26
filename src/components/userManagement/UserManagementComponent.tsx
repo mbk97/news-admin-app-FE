@@ -10,14 +10,27 @@ import { Modal } from "../common/Modal";
 import CreateUser from "./CreateUser";
 import BanUser from "./BanUser";
 import CustomTable from "../common/CustomTable";
-import { userTableData } from "../../utils/data";
+import { useUserManagement } from "../../services/roles/role";
+import { TableLoader } from "../loaders";
+import { formatDate } from "../../utils/date";
+import { useToast } from "../../hooks/useToast";
 
 const UserManagementComponent = () => {
+  const { toastError } = useToast();
   const [openBanModal, setOpenBanModal] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({});
+  const [fullName, setFullName] = useState("");
+  const [roleName, setRoleName] = useState("");
+  const { getAllUsers } = useUserManagement({
+    roleName,
+    fullname: fullName,
+  });
+  const { data: data, isPending } = getAllUsers;
+
+  console.log(data, "USERS");
 
   const handleOpenCreate = () => {
     setOpenCreate(true);
@@ -43,10 +56,24 @@ const UserManagementComponent = () => {
     setIsEditing(false);
   };
 
+  const handleSearch = () => {
+    if (!fullName && !roleName) {
+      toastError("Please enter a search parameter.");
+      return;
+    }
+    getAllUsers.refetch();
+  };
+
+  const handleClearSearch = () => {
+    setFullName("");
+    setRoleName("");
+    getAllUsers.refetch();
+  };
+
   const column = [
     {
       Header: "Full Name",
-      accessor: "fullName",
+      accessor: "fullname",
     },
     {
       Header: "Email",
@@ -54,11 +81,16 @@ const UserManagementComponent = () => {
     },
     {
       Header: "Role",
-      accessor: "role",
+      accessor: "roleName",
     },
     {
       Header: "Last Activity Date",
       accessor: "lastSeen",
+    },
+    {
+      Header: "Date Created",
+      accessor: "createdAt",
+      Cell: ({ value }: { value: string }) => formatDate(value),
     },
     {
       Header: "Action",
@@ -105,28 +137,45 @@ const UserManagementComponent = () => {
           type="text"
           placeholder="Search by name"
           label="Full Name"
-          value=""
-          name=""
-          handleChange={() => {}}
+          value={fullName}
+          name="fullName"
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setFullName(e.target.value);
+          }}
         />
         <CustomInput
           type="text"
           placeholder="Search by role"
           label="Role"
-          value=""
-          name=""
-          handleChange={() => {}}
+          value={roleName}
+          name={roleName}
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setRoleName(e.target.value);
+          }}
         />
         <CustomButton
           text="Search Users"
           className="w-auto h-[40px] mt-[30px]"
-          // handleClick={handleOpen}
+          handleClick={handleSearch}
+          isLoading={isPending}
+          disabled={isPending}
+        />
+        <CustomButton
+          text="Clear Search"
+          className="w-auto h-[40px] mt-[30px]"
+          handleClick={handleClearSearch}
+          isLoading={isPending}
+          disabled={isPending}
         />
       </section>
 
       <section className="mt-8  bg-white rounded-md p-5">
         <HeaderText text="Users" />
-        <CustomTable data={userTableData} columns={column} />
+        {isPending ? (
+          <TableLoader />
+        ) : (
+          <CustomTable data={data ?? []} columns={column} />
+        )}
       </section>
       <div>
         <Modal

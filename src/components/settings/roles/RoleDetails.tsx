@@ -1,21 +1,22 @@
 import { MdCancel } from "react-icons/md";
 import { CustomButton } from "../../common/CustomButton";
-import { IRoles } from "../../../types";
+import { IRoles, IUser } from "../../../types";
 import { useUserManagement } from "../../../services/roles/role";
+import { ImSpinner10 } from "react-icons/im";
 
 interface IProps {
   roleDetails: IRoles;
 }
 
 const RoleDetails = ({ roleDetails }: IProps) => {
-  console.log(roleDetails.roleName, "RRRRRRRR");
-
   const { getAllUserUnderRole } = useUserManagement({
     roleName: roleDetails?.roleName,
   });
 
-  const { data } = getAllUserUnderRole;
-  console.log(data, "ASSIGNED USERS HERE");
+  const { data, isPending } = getAllUserUnderRole;
+  const assignedUsers = data?.data.data;
+  console.log(assignedUsers, "ASSIGNED USERS");
+
   return (
     <div>
       <section className="mt-[30px]">
@@ -26,18 +27,27 @@ const RoleDetails = ({ roleDetails }: IProps) => {
 
         <section className="flex justify-between flex-col  h-[85vh]">
           <div className="mt-[30px]">
-            <h3 className="font-semibold mb-3">Assigned Users:</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="font-semibold mb-3">Assigned Users:</h3>
+              {isPending ? (
+                <ImSpinner10 className="animate-spin text-primary" size={20} />
+              ) : null}
+            </div>
             <div className="flex items-center gap-2 flex-wrap">
-              {/* {assignedUsers?.data?.map((user: any) => {
-                return (
-                  <div className="bg-white p-2 h-[38px] w-auto shadow-md border flex justify-between gap-1 ">
-                    <p className="text-primary text-[12px] font-semibold">
-                      {user.email}
-                    </p>
-                    <MdCancel className="text-error cursor-pointer" />
-                  </div>
-                );
-              })} */}
+              {assignedUsers?.length !== 0 ? (
+                assignedUsers?.map((user: IUser) => {
+                  return (
+                    <div className="bg-white p-2 h-[38px] w-auto shadow-md border flex justify-between gap-1 ">
+                      <p className="text-primary text-[12px] font-semibold">
+                        {user.email}
+                      </p>
+                      <MdCancel className="text-error cursor-pointer" />
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-error">No users assigned</p>
+              )}
             </div>
           </div>
 

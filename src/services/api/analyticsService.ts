@@ -1,15 +1,19 @@
 import apiClient from "./apiClient";
 
+interface MonthlyViewsParams {
+  year?: number;
+  month?: number;
+}
+
 export const analyticsService = {
-  getDashboardStats: () => apiClient.get("/analytics/dashboard"),
+  getMonthlyViews: () => apiClient.get("/news-app/monthly-views"),
 
-  getArticleStats: (params?: unknown) =>
-    apiClient.get("/analytics/articles", { params }),
+  getTopPerformingNews: () => apiClient.get("/news-app/top-performing-news"),
 
-  getUserStats: () => apiClient.get("/analytics/users"),
+  getDashboardStats: () => apiClient.get("/news-app/dashboard-data"),
 
-  getActivityLogs: (params?: unknown) =>
-    apiClient.get("/analytics/activity-logs", { params }),
+  getMonthlyCategoryViews: (params?: MonthlyViewsParams) =>
+    apiClient.get("/news-app/monthly-category-views", { params }),
 
   getTrendingArticles: () => apiClient.get("/analytics/trending"),
 };
