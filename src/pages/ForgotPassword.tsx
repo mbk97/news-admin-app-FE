@@ -2,24 +2,38 @@ import { Link } from "react-router-dom";
 import { CustomButton } from "../components/common/CustomButton";
 import CustomInput from "../components/common/CustomInput";
 import AuthLayout from "../components/layout/AuthLayout";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikProps, FieldProps } from "formik";
+import { useUserAuth } from "../services/auth/auth";
+import { resetPasswordSchema } from "../utils/schema";
+
+interface FormValues{
+  email: string;
+}
 
 const ForgotPassword = () => {
-  const userData = {};
-  const handleSubmit = () => {};
+  const { forgotPasswordMutation } = useUserAuth()
+  const {isPending,mutate} = forgotPasswordMutation
+  const userData = {
+    email:""
+  };
+  const handleSubmit = (values:FormValues) => {
+    mutate(values.email)
+  };
+
+  
   return (
     <div>
       <AuthLayout>
         <Formik
           initialValues={userData}
-          // validationSchema={validationSchema}
+          validationSchema={resetPasswordSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleChange }: any) => (
+          {({ handleChange }: FormikProps<FormValues>) => (
             <Form className="w-[100%] flex  flex-col justify-center items-center">
               <div className="mt-5 lg:w-[50%] w-[80%]">
-                <Field name="username">
-                  {({ field }: any) => (
+                <Field name="email">
+                  {({ field }: FieldProps) => (
                     <div className="relative mb-1">
                       <CustomInput
                         labelStyle="text-sm font-medium"
@@ -48,7 +62,7 @@ const ForgotPassword = () => {
               </div>
 
               <div className="mt-7 w-[80%] lg:w-[50%]">
-                <CustomButton text="Reset Password" />
+                <CustomButton text="Reset Password" isLoading={isPending} disabled={isPending}/>
               </div>
             </Form>
           )}

@@ -10,14 +10,30 @@ import { Modal } from "../common/Modal";
 import CreateUser from "./CreateUser";
 import BanUser from "./BanUser";
 import CustomTable from "../common/CustomTable";
-import { userTableData } from "../../utils/data";
+import { useUserManagement } from "../../services/roles/role";
+import { TableLoader } from "../loaders";
+import { formatDate } from "../../utils/date";
+import { useToast } from "../../hooks/useToast";
+import CustomSelect from "../common/CustomSelect";
+import { CellValueForUsers, IUser } from "../../types";
 
 const UserManagementComponent = () => {
+  const { toastError } = useToast();
   const [openBanModal, setOpenBanModal] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({});
+  const [fullName, setFullName] = useState("");
+  const [roleName, setRoleName] = useState("");
+  const { getAllUsers, getRoles } = useUserManagement({
+    roleName,
+    fullname: fullName,
+  });
+  const { data: data, isFetching: loadingUsers } = getAllUsers;
+  const { data: rolesData, isFetching: rolesPending } = getRoles;
+
+  console.log(data, "USERS");
 
   const handleOpenCreate = () => {
     setOpenCreate(true);
@@ -26,14 +42,14 @@ const UserManagementComponent = () => {
     setOpenCreate(false);
   };
 
-  const handleOpenBanModal = (data: any) => {
+  const handleOpenBanModal = (data: IUser) => {
     setOpenBanModal(true);
     setUserData(data);
   };
   const handleCloseBanModal = () => {
     setOpenBanModal(false);
   };
-  const handleOpenEditModal = (data: any) => {
+  const handleOpenEditModal = (data: IUser) => {
     setOpenEdit(true);
     setUserData(data);
     setIsEditing(true);
@@ -43,10 +59,24 @@ const UserManagementComponent = () => {
     setIsEditing(false);
   };
 
+  const handleSearch = () => {
+    if (!fullName && !roleName) {
+      toastError("Please enter a search parameter.");
+      return;
+    }
+    getAllUsers.refetch();
+  };
+
+  const handleClearSearch = () => {
+    setFullName("");
+    setRoleName("");
+    getAllUsers.refetch();
+  };
+
   const column = [
     {
       Header: "Full Name",
-      accessor: "fullName",
+      accessor: "fullname",
     },
     {
       Header: "Email",
@@ -54,16 +84,21 @@ const UserManagementComponent = () => {
     },
     {
       Header: "Role",
-      accessor: "role",
+      accessor: "roleName",
     },
     {
       Header: "Last Activity Date",
       accessor: "lastSeen",
     },
     {
+      Header: "Date Created",
+      accessor: "createdAt",
+      Cell: ({ value }: { value: string }) => formatDate(value),
+    },
+    {
       Header: "Action",
       accessor: "action",
-      Cell: (value: any) => (
+      Cell: (value: CellValueForUsers) => (
         <div className="flex gap-2 items-center">
           <IconButton
             onClick={() => {
@@ -88,6 +123,8 @@ const UserManagementComponent = () => {
     },
   ];
 
+  console.log(rolesData);
+
   return (
     <DashboardLayout>
       <div className="mt-10">
@@ -105,28 +142,45 @@ const UserManagementComponent = () => {
           type="text"
           placeholder="Search by name"
           label="Full Name"
-          value=""
-          name=""
-          handleChange={() => {}}
+          value={fullName}
+          name="fullName"
+          handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setFullName(e.target.value);
+          }}
         />
-        <CustomInput
-          type="text"
-          placeholder="Search by role"
-          label="Role"
-          value=""
-          name=""
-          handleChange={() => {}}
+        <CustomSelect
+          options={rolesData?.data?.data ?? []}
+          label={rolesPending ? "Loading..." : "Role"}
+          value={roleName}
+          name="roleName"
+          handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setRoleName(e.target.value);
+          }}
         />
+
         <CustomButton
           text="Search Users"
           className="w-auto h-[40px] mt-[30px]"
-          // handleClick={handleOpen}
+          handleClick={handleSearch}
+          isLoading={loadingUsers}
+          disabled={loadingUsers}
+        />
+        <CustomButton
+          text="Clear Search"
+          className="w-auto h-[40px] mt-[30px]"
+          handleClick={handleClearSearch}
+          isLoading={loadingUsers}
+          disabled={loadingUsers}
         />
       </section>
 
       <section className="mt-8  bg-white rounded-md p-5">
         <HeaderText text="Users" />
-        <CustomTable data={userTableData} columns={column} />
+        {loadingUsers ? (
+          <TableLoader />
+        ) : (
+          <CustomTable data={data ?? []} columns={column} />
+        )}
       </section>
       <div>
         <Modal

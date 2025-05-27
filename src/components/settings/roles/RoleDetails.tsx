@@ -1,52 +1,53 @@
 import { MdCancel } from "react-icons/md";
 import { CustomButton } from "../../common/CustomButton";
+import { IRoles, IUser } from "../../../types";
+import { useUserManagement } from "../../../services/roles/role";
+import { ImSpinner10 } from "react-icons/im";
 
-const RoleDetails = () => {
-  const assignedUsers = [
-    {
-      id: 1,
-      email: "Mubarak.muhammed@gmail.com",
-    },
-    {
-      id: 2,
-      email: "John.doe@gmail.com",
-    },
-    {
-      id: 3,
-      email: "Mubarak.abimbole@gmail.com",
-    },
-    {
-      id: 4,
-      email: "Olamide.olabiyi@gmail.com",
-    },
-    {
-      id: 5,
-      email: "Damola.awe@gmail.com",
-    },
-  ];
+interface IProps {
+  roleDetails: IRoles;
+}
+
+const RoleDetails = ({ roleDetails }: IProps) => {
+  const { getAllUserUnderRole } = useUserManagement({
+    roleName: roleDetails?.roleName,
+  });
+
+  const { data, isPending } = getAllUserUnderRole;
+  const assignedUsers = data?.data.data;
+  console.log(assignedUsers, "ASSIGNED USERS");
 
   return (
     <div>
       <section className="mt-[30px]">
         <div className="flex gap-2 items-center">
           <h3 className="font-semibold">Role Name:</h3>
-          <p>Author</p>
+          <p>{roleDetails?.roleName}</p>
         </div>
 
         <section className="flex justify-between flex-col  h-[85vh]">
           <div className="mt-[30px]">
-            <h3 className="font-semibold mb-3">Assigned Users:</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="font-semibold mb-3">Assigned Users:</h3>
+              {isPending ? (
+                <ImSpinner10 className="animate-spin text-primary" size={20} />
+              ) : null}
+            </div>
             <div className="flex items-center gap-2 flex-wrap">
-              {assignedUsers.map((user) => {
-                return (
-                  <div className="bg-white p-2 h-[38px] w-auto shadow-md border flex justify-between gap-1 ">
-                    <p className="text-primary text-[12px] font-semibold">
-                      {user.email}
-                    </p>
-                    <MdCancel className="text-error cursor-pointer" />
-                  </div>
-                );
-              })}
+              {assignedUsers?.length !== 0 ? (
+                assignedUsers?.map((user: IUser) => {
+                  return (
+                    <div className="bg-white p-2 h-[38px] w-auto shadow-md border flex justify-between gap-1 ">
+                      <p className="text-primary text-[12px] font-semibold">
+                        {user.email}
+                      </p>
+                      <MdCancel className="text-error cursor-pointer" />
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="text-error">No users assigned</p>
+              )}
             </div>
           </div>
 

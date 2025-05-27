@@ -1,29 +1,41 @@
 import { Link } from "react-router-dom";
 import { CustomButton } from "../components/common/CustomButton";
 import CustomInput from "../components/common/CustomInput";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldProps, FormikProps } from "formik";
 import AuthLayout from "../components/layout/AuthLayout";
+import { validationSchema } from "../utils/schema";
+import { useUserAuth } from "../services/auth/auth";
+
+interface FormValues{
+  email: string;
+  password:string
+}
 
 const Login = () => {
+  const {loginUserMutation} = useUserAuth()
+
+  const {mutate, isPending} = loginUserMutation
   const userData = {
     email: "",
     password: "",
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = (values:FormValues) => {
+    mutate(values)
+  };
 
   return (
     <AuthLayout>
       <Formik
         initialValues={userData}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ handleChange }: any) => (
+        {({ handleChange }:FormikProps<FormValues>) => (
           <Form className="w-[100%] flex  flex-col justify-center items-center">
             <div className="mt-5 lg:w-[50%] w-[80%]">
-              <Field name="username">
-                {({ field }: any) => (
+              <Field name="email">
+                {({ field }: FieldProps) => (
                   <div className="relative mb-4">
                     <CustomInput
                       labelStyle="text-sm font-medium"
@@ -44,8 +56,8 @@ const Login = () => {
               />
             </div>
             <div className="mt-5 w-[80%] lg:w-[50%]">
-              <Field name="username">
-                {({ field }: any) => (
+              <Field name="password">
+                {({ field }: FieldProps) => (
                   <div className="relative mb-1">
                     <CustomInput
                       labelStyle="text-sm font-medium"
@@ -75,7 +87,7 @@ const Login = () => {
             </div>
 
             <div className="mt-7 w-[80%] lg:w-[50%]">
-              <CustomButton text="Login" />
+              <CustomButton text="Login" isLoading={isPending} disabled={isPending}/>
             </div>
           </Form>
         )}

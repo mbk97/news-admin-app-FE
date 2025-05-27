@@ -7,7 +7,6 @@ import CustomModal from "../common/CustomModal";
 import { IconButton, Tooltip } from "@mui/material";
 import { IoMdEye } from "react-icons/io";
 import CustomTable from "../common/CustomTable";
-import { newsData } from "../../utils/data";
 import CreateArticles from "./CreateArticles";
 import ViewBlogDetails from "./ViewBlogDetails";
 import CustomDrawer from "../common/CustomDrawer";
@@ -16,15 +15,22 @@ import { Modal } from "../common/Modal";
 import DeleteBlog from "./DeleteBlog";
 import PublishBlog from "./PublishBlog";
 import { MdPublish } from "react-icons/md";
+import { useNews } from "../../services/news/news";
+import { TableLoader } from "../loaders";
+import { CellValue, NewsCategory } from "../../types/news";
 
 const ManageArticlesComponent = () => {
+  const { fetchAllAvailableNews } = useNews({});
+  const { data: newsData, isPending } = fetchAllAvailableNews;
+  console.log(newsData);
+
   const [openViewMore, setOpenViewMore] = useState<boolean>(false);
   const [openCreate, setOpenCreate] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openPublish, setOpenPublish] = useState<boolean>(false);
-  const [viewMoreData, setOpenViewMoreData] = useState({});
+  const [viewMoreData, setOpenViewMoreData] = useState<NewsCategory>();
 
-  const handleOpenPublish = (data: any) => {
+  const handleOpenPublish = (data: NewsCategory) => {
     setOpenPublish(true);
     setOpenViewMoreData(data);
   };
@@ -33,7 +39,7 @@ const ManageArticlesComponent = () => {
     setOpenPublish(false);
   };
 
-  const handleOpenViewMore = (data: any) => {
+  const handleOpenViewMore = (data: NewsCategory) => {
     setOpenViewMore(true);
     setOpenViewMoreData(data);
   };
@@ -46,7 +52,7 @@ const ManageArticlesComponent = () => {
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
-  const handleOpenDelete = (data: any) => {
+  const handleOpenDelete = (data: NewsCategory) => {
     setOpenDelete(true);
     setOpenViewMoreData(data);
   };
@@ -74,11 +80,12 @@ const ManageArticlesComponent = () => {
     {
       Header: "Action",
       accessor: "action",
-      Cell: (value: any) => (
+      Cell: (value: CellValue) => (
         <div className="flex gap-2 items-center">
           <IconButton
             onClick={() => {
               handleOpenViewMore(value.cell.row.original);
+              console.log(value.cell.row.original);
             }}
           >
             <Tooltip title="Edit User" arrow>
@@ -94,15 +101,19 @@ const ManageArticlesComponent = () => {
               <MdDelete className="danger" />
             </Tooltip>
           </IconButton>
-          <IconButton
-            onClick={() => {
-              handleOpenPublish(value.cell.row.original);
-            }}
-          >
-            <Tooltip title="Publish" arrow>
-              <MdPublish className="green" />
-            </Tooltip>
-          </IconButton>
+          {!value.cell.row.original.publish ? (
+            <IconButton
+              onClick={() => {
+                handleOpenPublish(value.cell.row.original);
+              }}
+            >
+              <Tooltip title="Publish" arrow>
+                <MdPublish className="green" />
+              </Tooltip>
+            </IconButton>
+          ) : (
+            <p className="bg-green-400 p-1 text-white rounded-md">Published</p>
+          )}
         </div>
       ),
     },
@@ -170,7 +181,12 @@ const ManageArticlesComponent = () => {
 
           <section className="mt-8  bg-white rounded-md p-5">
             <HeaderText text="Created Blogs" />
-            <CustomTable columns={column} data={newsData} />
+            {isPending ? (
+              <TableLoader />
+            ) : (
+              <CustomTable columns={column} data={newsData ?? []} />
+            )}
+            {/* <CustomTable columns={column} data={newsData} /> */}
           </section>
         </div>
 
@@ -180,26 +196,26 @@ const ManageArticlesComponent = () => {
           width="md"
           handleClose={handleCloseCreate}
         >
-          <CreateArticles />
+          <CreateArticles handleCloseCreate={handleCloseCreate} />
         </CustomModal>
         <CustomDrawer
           open={openViewMore}
           handleClose={handleCloseViewMore}
           drawerTitle="View More"
         >
-          <ViewBlogDetails data={viewMoreData} />
+          <ViewBlogDetails data={viewMoreData!} />
         </CustomDrawer>
 
         <Modal isOpen={openDelete} onClose={handleCloseDelete}>
           <DeleteBlog
-            data={viewMoreData}
+            data={viewMoreData!}
             handleCloseDelete={handleCloseDelete}
           />
         </Modal>
 
         <Modal isOpen={openPublish} onClose={handleClosePublish}>
           <PublishBlog
-            data={viewMoreData}
+            data={viewMoreData!}
             handleClosePublish={handleClosePublish}
           />
         </Modal>
