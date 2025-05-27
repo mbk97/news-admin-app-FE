@@ -1,7 +1,8 @@
 import React from "react";
+import { ICategory, IRoles } from "../../types";
 
 interface ISelectProps {
-  options: any[];
+  options: IRoles[] | ICategory[];
   name: string;
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -35,28 +36,19 @@ const CustomSelect = ({
           Select a value
         </option>
 
-        {name === "Role" && (
-          <>
-            {options?.map((item: any) => {
-              return (
-                <option value={item.id} key={item.id}>
-                  {item.name}
-                </option>
-              );
-            })}
-          </>
-        )}
-        {name === "category" && (
-          <>
-            {options?.map((item: any) => {
-              return (
-                <option value={item.categoryName} key={item.id}>
-                  {item.categoryName}
-                </option>
-              );
-            })}
-          </>
-        )}
+        {name === "roleName" &&
+          (options as IRoles[]).map((item) => (
+            <option value={item.roleName} key={item._id}>
+              {item.roleName}
+            </option>
+          ))}
+
+        {name === "category" &&
+          (options as ICategory[]).map((item) => (
+            <option value={item.categoryName} key={item._id}>
+              {item.categoryName}
+            </option>
+          ))}
       </select>
     </div>
   );

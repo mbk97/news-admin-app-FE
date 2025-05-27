@@ -65,9 +65,8 @@ const useUserManagement = ({
   });
 
   const getAllUsers = useQuery({
-    queryKey: ["users", roleName, fullname],
+    queryKey: ["users"],
     queryFn: async () => userService.getAllUsers({ roleName, fullname }),
-    enabled: false,
     select(data) {
       return data.data.data;
     },

@@ -14,6 +14,8 @@ import { useUserManagement } from "../../services/roles/role";
 import { TableLoader } from "../loaders";
 import { formatDate } from "../../utils/date";
 import { useToast } from "../../hooks/useToast";
+import CustomSelect from "../common/CustomSelect";
+import { CellValueForUsers, IUser } from "../../types";
 
 const UserManagementComponent = () => {
   const { toastError } = useToast();
@@ -24,11 +26,12 @@ const UserManagementComponent = () => {
   const [userData, setUserData] = useState({});
   const [fullName, setFullName] = useState("");
   const [roleName, setRoleName] = useState("");
-  const { getAllUsers } = useUserManagement({
+  const { getAllUsers, getRoles } = useUserManagement({
     roleName,
     fullname: fullName,
   });
-  const { data: data, isPending } = getAllUsers;
+  const { data: data, isFetching: loadingUsers } = getAllUsers;
+  const { data: rolesData, isFetching: rolesPending } = getRoles;
 
   console.log(data, "USERS");
 
@@ -39,14 +42,14 @@ const UserManagementComponent = () => {
     setOpenCreate(false);
   };
 
-  const handleOpenBanModal = (data: any) => {
+  const handleOpenBanModal = (data: IUser) => {
     setOpenBanModal(true);
     setUserData(data);
   };
   const handleCloseBanModal = () => {
     setOpenBanModal(false);
   };
-  const handleOpenEditModal = (data: any) => {
+  const handleOpenEditModal = (data: IUser) => {
     setOpenEdit(true);
     setUserData(data);
     setIsEditing(true);
@@ -95,7 +98,7 @@ const UserManagementComponent = () => {
     {
       Header: "Action",
       accessor: "action",
-      Cell: (value: any) => (
+      Cell: (value: CellValueForUsers) => (
         <div className="flex gap-2 items-center">
           <IconButton
             onClick={() => {
@@ -120,6 +123,8 @@ const UserManagementComponent = () => {
     },
   ];
 
+  console.log(rolesData);
+
   return (
     <DashboardLayout>
       <div className="mt-10">
@@ -143,35 +148,35 @@ const UserManagementComponent = () => {
             setFullName(e.target.value);
           }}
         />
-        <CustomInput
-          type="text"
-          placeholder="Search by role"
-          label="Role"
+        <CustomSelect
+          options={rolesData?.data?.data ?? []}
+          label={rolesPending ? "Loading..." : "Role"}
           value={roleName}
-          name={roleName}
-          handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          name="roleName"
+          handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
             setRoleName(e.target.value);
           }}
         />
+
         <CustomButton
           text="Search Users"
           className="w-auto h-[40px] mt-[30px]"
           handleClick={handleSearch}
-          isLoading={isPending}
-          disabled={isPending}
+          isLoading={loadingUsers}
+          disabled={loadingUsers}
         />
         <CustomButton
           text="Clear Search"
           className="w-auto h-[40px] mt-[30px]"
           handleClick={handleClearSearch}
-          isLoading={isPending}
-          disabled={isPending}
+          isLoading={loadingUsers}
+          disabled={loadingUsers}
         />
       </section>
 
       <section className="mt-8  bg-white rounded-md p-5">
         <HeaderText text="Users" />
-        {isPending ? (
+        {loadingUsers ? (
           <TableLoader />
         ) : (
           <CustomTable data={data ?? []} columns={column} />

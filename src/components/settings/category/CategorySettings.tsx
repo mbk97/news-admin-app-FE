@@ -126,7 +126,7 @@ const CategorySettings = () => {
       <Modal isOpen={openDelete} onClose={handleCloseDelete}>
         <DeleteCategory
           handleCloseDelete={handleCloseDelete}
-          deleteId={editingCategoryId}
+          // deleteId={editingCategoryId}
         />
       </Modal>
     </div>

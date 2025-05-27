@@ -72,7 +72,7 @@ const CreateArticles = ({ handleCloseCreate }: IProps) => {
         <div className="md:w-[400px] w-[100%]">
           <CustomSelect
             options={categoryData?.data?.data ?? []}
-            label="Blog Category"
+            label={loadingCat ? "Loading..." : "Blog Category"}
             value={category}
             name={"category"}
             handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -1,5 +1,4 @@
 import { FaHourglassEnd, FaRegEye, FaSearch, FaUsers } from "react-icons/fa";
-import { newsData, trendingNews } from "../../utils/data";
 import Card from "../common/Card";
 import React, { useState } from "react";
 import user from "../../assets/images/user.jpg";
@@ -12,13 +11,14 @@ import { PiArticleNyTimesBold } from "react-icons/pi";
 import { CardLoader, TableLoader, TrendingNewsLoader } from "../loaders";
 import { useNews } from "../../services/news/news";
 import { formatDate } from "../../utils/date";
+import { CellValue, NewsCategory } from "../../types/news";
 
 const DashboardComponent = () => {
   const [viewMoreData, setViewMoreData] = useState({});
   console.log(viewMoreData);
   const [open, setOpen] = useState(false);
 
-  const handleOpenViewMore = (data: any) => {
+  const handleOpenViewMore = (data: NewsCategory) => {
     setViewMoreData(data);
     setOpen(true);
   };
@@ -60,7 +60,7 @@ const DashboardComponent = () => {
     {
       Header: "Action",
       accessor: "action",
-      Cell: (value: any) => (
+      Cell: (value: CellValue) => (
         <div className="flex gap-2 items-center">
           <IconButton
             onClick={() => {
