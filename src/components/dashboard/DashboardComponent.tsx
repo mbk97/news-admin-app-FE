@@ -70,7 +70,7 @@ const DashboardComponent = () => {
             <Tooltip title="Edit User" arrow>
               <IoMdEye />
             </Tooltip>
-          </IconButton>
+          </IconButton>{" "}
         </div>
       ),
     },
