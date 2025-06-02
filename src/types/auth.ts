@@ -8,3 +8,12 @@ export interface IUpdatePassword {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface GetUserActivitiesPayload {
+  userId: string;
+  startDate: string; // ISO date string
+  endDate: string; // ISO date string
+  action?: string;
+  page?: number;
+  limit?: number;
+}

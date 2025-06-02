@@ -7,6 +7,8 @@ import ManageArticles from "./pages/ManageArticles";
 import AnalyticsAndReports from "./pages/AnalyticsAndReports";
 import UserManagement from "./pages/UserManagement";
 import Settings from "./pages/Settings";
+import AuditLog from "./pages/AuditLog";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
   return (
@@ -14,51 +16,18 @@ function App() {
       <Routes>
         <Route element={<Login />} path="/" />
         <Route element={<ForgotPassword />} path="/forgot-password" />
-        <Route
-          index
-          path="/dashboard"
-          element={
-            // <ProtectedRoute>
-            <Dashboard />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
-          index
-          path="/manage-articles"
-          element={
-            // <ProtectedRoute>
-            <ManageArticles />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
-          index
-          path="/analytics-reports"
-          element={
-            // <ProtectedRoute>
-            <AnalyticsAndReports />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
-          index
-          path="/user-management"
-          element={
-            // <ProtectedRoute>
-            <UserManagement />
-            // </ProtectedRoute>
-          }
-        />
-        <Route
-          index
-          path="/settings"
-          element={
-            // <ProtectedRoute>
-            <Settings />
-            // </ProtectedRoute>
-          }
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route index path="/manage-articles" element={<ManageArticles />} />
+          <Route
+            index
+            path="/analytics-reports"
+            element={<AnalyticsAndReports />}
+          />
+          <Route index path="/user-management" element={<UserManagement />} />
+          <Route index path="/activity-log" element={<AuditLog />} />
+          <Route index path="/settings" element={<Settings />} />
+        </Route>
       </Routes>
     </div>
   );

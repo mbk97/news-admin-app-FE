@@ -33,8 +33,6 @@ const UserManagementComponent = () => {
   const { data: data, isFetching: loadingUsers } = getAllUsers;
   const { data: rolesData, isFetching: rolesPending } = getRoles;
 
-  console.log(data, "USERS");
-
   const handleOpenCreate = () => {
     setOpenCreate(true);
   };
@@ -122,8 +120,6 @@ const UserManagementComponent = () => {
       ),
     },
   ];
-
-  console.log(rolesData);
 
   return (
     <DashboardLayout>

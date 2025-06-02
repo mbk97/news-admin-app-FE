@@ -1,3 +1,4 @@
+import { LuActivity } from "react-icons/lu";
 import { ISidebarTypes } from "../types";
 import { MdDashboardCustomize } from "react-icons/md";
 import { GrAnalytics, GrArticle } from "react-icons/gr";
@@ -43,6 +44,12 @@ export const sidebarData: ISidebarTypes[] = [
     title: "Settings",
     Icon: IoSettingsSharp,
     link: "/settings",
+  },
+  {
+    id: 5,
+    title: "Activity Log",
+    Icon: LuActivity,
+    link: "/activity-log",
   },
 ];
 

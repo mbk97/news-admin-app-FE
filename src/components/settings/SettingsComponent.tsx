@@ -1,14 +1,12 @@
 import { useState } from "react";
 import HeaderText from "../common/HeaderText";
 import DashboardLayout from "../layout/DashboardLayout";
-import ActivityLog from "./ActivityLog";
 import CategorySettings from "./category/CategorySettings";
 import ManageRoles from "./roles/ManageRoles";
 import ManagePassword from "./ManagePassword";
 import { TbCategoryFilled } from "react-icons/tb";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserCheck } from "react-icons/fa";
-import { LuActivity } from "react-icons/lu";
 
 const SettingsComponent = () => {
   const [openComponent, setOpenComponent] = useState<number>(1);
@@ -31,12 +29,12 @@ const SettingsComponent = () => {
       Component: ManageRoles,
       Icon: FaUserCheck,
     },
-    {
-      id: 4,
-      title: "Activity Log",
-      Component: ActivityLog,
-      Icon: LuActivity,
-    },
+    // {
+    //   id: 4,
+    //   title: "Activity Log",
+    //   Component: ActivityLog,
+    //   Icon: LuActivity,
+    // },
   ];
 
   const handleShowComponent = (id: number) => {

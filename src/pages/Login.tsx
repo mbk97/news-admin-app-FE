@@ -1,27 +1,34 @@
 import { Link } from "react-router-dom";
 import { CustomButton } from "../components/common/CustomButton";
 import CustomInput from "../components/common/CustomInput";
-import { Formik, Form, Field, ErrorMessage, FieldProps, FormikProps } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  FieldProps,
+  FormikProps,
+} from "formik";
 import AuthLayout from "../components/layout/AuthLayout";
 import { validationSchema } from "../utils/schema";
 import { useUserAuth } from "../services/auth/auth";
 
-interface FormValues{
+interface FormValues {
   email: string;
-  password:string
+  password: string;
 }
 
 const Login = () => {
-  const {loginUserMutation} = useUserAuth()
+  const { loginUserMutation } = useUserAuth();
 
-  const {mutate, isPending} = loginUserMutation
+  const { mutate, isPending } = loginUserMutation;
   const userData = {
     email: "",
     password: "",
   };
 
-  const handleSubmit = (values:FormValues) => {
-    mutate(values)
+  const handleSubmit = (values: FormValues) => {
+    mutate(values);
   };
 
   return (
@@ -31,7 +38,7 @@ const Login = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ handleChange }:FormikProps<FormValues>) => (
+        {({ handleChange }: FormikProps<FormValues>) => (
           <Form className="w-[100%] flex  flex-col justify-center items-center">
             <div className="mt-5 lg:w-[50%] w-[80%]">
               <Field name="email">
@@ -87,7 +94,11 @@ const Login = () => {
             </div>
 
             <div className="mt-7 w-[80%] lg:w-[50%]">
-              <CustomButton text="Login" isLoading={isPending} disabled={isPending}/>
+              <CustomButton
+                text="Login"
+                isLoading={isPending}
+                disabled={isPending}
+              />
             </div>
           </Form>
         )}

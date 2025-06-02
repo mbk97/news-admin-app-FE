@@ -8,17 +8,20 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getCustomErrorMessage } from "../../utils/error";
 import { get_roles_key } from "./roleKey";
+import { GetUserActivitiesPayload } from "../../types/auth";
 
 interface IUserManagementProps {
   handleClose?: () => void;
   roleName?: string;
   fullname?: string;
+  searchParamsForPagination?: GetUserActivitiesPayload;
 }
 
 const useUserManagement = ({
   handleClose,
   roleName,
   fullname,
+  searchParamsForPagination,
 }: IUserManagementProps) => {
   const { toastError, toastSuccess } = useToast();
   //   const navigate = useNavigate()
@@ -72,12 +75,22 @@ const useUserManagement = ({
     },
   });
 
+  const fetchUserActivities = useQuery({
+    queryKey: ["user-activity", searchParamsForPagination],
+    queryFn: async () =>
+      userService.getUserActivities(searchParamsForPagination!),
+    select(data) {
+      return data.data;
+    },
+  });
+
   return {
     registerUserMutation,
     getRoles,
     getAllUserUnderRole,
     createUserRoleMutation,
     getAllUsers,
+    fetchUserActivities,
   };
 };
 

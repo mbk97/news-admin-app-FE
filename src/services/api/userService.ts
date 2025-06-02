@@ -1,3 +1,4 @@
+import { GetUserActivitiesPayload } from "../../types/auth";
 import apiClient from "./apiClient";
 
 export interface IUserPayload {
@@ -33,4 +34,9 @@ export const userService = {
     apiClient.put(`/users/${id}`, payload),
 
   deleteUser: (id: string) => apiClient.delete(`/users/${id}`),
+
+  getUserActivities: (payload: GetUserActivitiesPayload) =>
+    apiClient.get(`/news-app-auth/activity-logs`, {
+      params: payload,
+    }),
 };

@@ -25,10 +25,10 @@ const DashboardComponent = () => {
 
   const { getDashboardStatsData, getTopPerformingNews } = useAnalyticsData();
   const { getRecentNewsForDashboard } = useNews({});
-  const { data: perfomingNewsData, isPending: perfomingNewsPending } =
+  const { data: perfomingNewsData, isFetching: perfomingNewsPending } =
     getTopPerformingNews;
   const { data: dashboardStats, isPending } = getDashboardStatsData;
-  const { data: recentNews, isPending: isNewsPending } =
+  const { data: recentNews, isFetching: isNewsPending } =
     getRecentNewsForDashboard;
 
   const performingNewsResult = perfomingNewsData?.filter(
@@ -199,7 +199,7 @@ const DashboardComponent = () => {
               <div>
                 {perfomingNewsPending ? (
                   <TrendingNewsLoader />
-                ) : (
+                ) : performingNewsResult.length !== 0 ? (
                   performingNewsResult?.map(
                     (trend: {
                       _id: string;
@@ -250,6 +250,10 @@ const DashboardComponent = () => {
                       );
                     }
                   )
+                ) : (
+                  <p className="text-gray-500 font-medium text-center mt-5">
+                    No Trending News
+                  </p>
                 )}
               </div>
             </div>
