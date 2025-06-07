@@ -1,42 +1,47 @@
 import { useState } from "react";
 import HeaderText from "../common/HeaderText";
 import DashboardLayout from "../layout/DashboardLayout";
-import ActivityLog from "./ActivityLog";
 import CategorySettings from "./category/CategorySettings";
 import ManageRoles from "./roles/ManageRoles";
 import ManagePassword from "./ManagePassword";
 import { TbCategoryFilled } from "react-icons/tb";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FaUserCheck } from "react-icons/fa";
-import { LuActivity } from "react-icons/lu";
+import { isAuthorized } from "../../utils/saveData";
 
 const SettingsComponent = () => {
-  const [openComponent, setOpenComponent] = useState<number>(1);
+  const isAdmin = isAuthorized(["Admin"]);
+  const [openComponent, setOpenComponent] = useState<number>(
+    isAdmin ? 1 : 2 // default to first visible tab
+  );
+
   const tabData = [
-    {
-      id: 1,
-      title: "Manage Category",
-      Component: CategorySettings,
-      Icon: TbCategoryFilled,
-    },
+    ...(isAdmin
+      ? [
+          {
+            id: 1,
+            title: "Manage Category",
+            Component: CategorySettings,
+            Icon: TbCategoryFilled,
+          },
+        ]
+      : []),
     {
       id: 2,
       title: "Manage Password",
       Component: ManagePassword,
       Icon: RiLockPasswordFill,
     },
-    {
-      id: 3,
-      title: "Manage Roles",
-      Component: ManageRoles,
-      Icon: FaUserCheck,
-    },
-    {
-      id: 4,
-      title: "Activity Log",
-      Component: ActivityLog,
-      Icon: LuActivity,
-    },
+    ...(isAdmin
+      ? [
+          {
+            id: 3,
+            title: "Manage Roles",
+            Component: ManageRoles,
+            Icon: FaUserCheck,
+          },
+        ]
+      : []),
   ];
 
   const handleShowComponent = (id: number) => {
@@ -81,7 +86,7 @@ const SettingsComponent = () => {
             );
           })}
         </div>
-        <div className="w-[100%]  lg:w-[80%] bg-white p-3 rounded-md h-[600px] mt-8 lg:mt-0">
+        <div className="w-[100%]  lg:w-[80%] bg-white overflow-scroll p-3 rounded-md h-[600px] mt-8 lg:mt-0">
           <div className="">
             {tabData.map((tab) => {
               return (

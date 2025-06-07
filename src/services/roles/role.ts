@@ -1,27 +1,29 @@
-// import { useNavigate } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import {
   ICreateRolePayload,
   IUserPayload,
   userService,
 } from "../api/userService";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCustomErrorMessage } from "../../utils/error";
 import { get_roles_key } from "./roleKey";
+import { GetUserActivitiesPayload } from "../../types/auth";
 
 interface IUserManagementProps {
   handleClose?: () => void;
   roleName?: string;
   fullname?: string;
+  searchParamsForPagination?: GetUserActivitiesPayload;
 }
 
 const useUserManagement = ({
   handleClose,
   roleName,
   fullname,
+  searchParamsForPagination,
 }: IUserManagementProps) => {
+  const queryClient = useQueryClient();
   const { toastError, toastSuccess } = useToast();
-  //   const navigate = useNavigate()
 
   const registerUserMutation = useMutation({
     mutationFn: async (user: IUserPayload) => {
@@ -65,10 +67,58 @@ const useUserManagement = ({
   });
 
   const getAllUsers = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", roleName, fullname],
     queryFn: async () => userService.getAllUsers({ roleName, fullname }),
     select(data) {
       return data.data.data;
+    },
+  });
+
+  const modifyUserStatus = useMutation({
+    mutationFn: async (id: string) => {
+      return userService.modifyUserStatus(id);
+    },
+    onSuccess(data) {
+      toastSuccess(data.data.message);
+      handleClose?.();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.invalidateQueries(["users", roleName, fullname] as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.invalidateQueries(["roleName"] as any);
+    },
+    onError(error) {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(errorMsg);
+    },
+  });
+
+  const editUserMutation = useMutation({
+    mutationFn: async (payload: {
+      id: string;
+      fullname: string;
+      roleName: string;
+    }) => {
+      const { id, ...userData } = payload;
+      return userService.updateUser(id, userData);
+    },
+    onSuccess(data) {
+      toastSuccess(data.data.message);
+      handleClose?.();
+      getAllUsers.refetch();
+      getAllUserUnderRole.refetch();
+    },
+    onError(error) {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(errorMsg);
+    },
+  });
+
+  const fetchUserActivities = useQuery({
+    queryKey: ["user-activity", searchParamsForPagination],
+    queryFn: async () =>
+      userService.getUserActivities(searchParamsForPagination!),
+    select(data) {
+      return data.data;
     },
   });
 
@@ -78,6 +128,9 @@ const useUserManagement = ({
     getAllUserUnderRole,
     createUserRoleMutation,
     getAllUsers,
+    modifyUserStatus,
+    fetchUserActivities,
+    editUserMutation,
   };
 };
 

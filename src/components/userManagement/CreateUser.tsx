@@ -11,6 +11,8 @@ import { CustomButton } from "../common/CustomButton";
 import HeaderText from "../common/HeaderText";
 import { useUserManagement } from "../../services/roles/role";
 import { registerUserSchema } from "../../utils/schema";
+import { IRoles, IUser } from "../../types";
+import CustomSelect from "../common/CustomSelect";
 
 interface ICreateUsers {
   fullname: string;
@@ -21,29 +23,47 @@ interface ICreateUsers {
 interface IProps {
   handleClose: () => void;
   isEditing: boolean;
+  userData: IUser;
+  rolesData: IRoles[];
 }
 
-const CreateUser = ({ handleClose, isEditing }: IProps) => {
-  const { registerUserMutation } = useUserManagement({ handleClose });
+const CreateUser = ({
+  handleClose,
+  isEditing,
+  userData,
+  rolesData,
+}: IProps) => {
+  const { registerUserMutation, editUserMutation } = useUserManagement({
+    handleClose,
+  });
   const { isPending, mutate } = registerUserMutation;
-
-  const userData = {
-    fullname: "",
-    email: "",
-    roleName: "",
-  };
+  const { isPending: isEditingPending, mutate: editUser } = editUserMutation;
 
   const handleSubmit = (values: ICreateUsers) => {
-    mutate(values);
+    const payload = {
+      id: userData?._id,
+      fullname: values.fullname,
+      roleName: values.roleName,
+    };
+    if (isEditing) {
+      editUser(payload);
+    } else {
+      mutate(values);
+    }
   };
 
-  console.log(handleClose);
+  console.log("Roles Data", rolesData);
+
   return (
     <div>
       <HeaderText text={isEditing ? "Edit User" : "Create User"} />
       <section className="mt-[20px]">
         <Formik
-          initialValues={userData}
+          initialValues={{
+            fullname: isEditing ? userData.fullname : "",
+            email: isEditing ? userData.email : "",
+            roleName: isEditing ? userData.roleName : "",
+          }}
           validationSchema={registerUserSchema}
           onSubmit={handleSubmit}
         >
@@ -83,6 +103,7 @@ const CreateUser = ({ handleClose, isEditing }: IProps) => {
                         handleChange={handleChange}
                         placeholder="Enter Your Email"
                         label="Email"
+                        disabled={isEditing}
                       />
                     </div>
                   )}
@@ -97,14 +118,12 @@ const CreateUser = ({ handleClose, isEditing }: IProps) => {
                 <Field name="roleName">
                   {({ field }: FieldProps) => (
                     <div className="relative mb-4">
-                      <CustomInput
-                        labelStyle="text-sm font-medium"
-                        type="text"
-                        name={field.name}
+                      <CustomSelect
+                        options={rolesData}
+                        label={"Role"}
                         value={field.value}
+                        name={field.name}
                         handleChange={handleChange}
-                        placeholder="Select Role"
-                        label="Enter Role"
                       />
                     </div>
                   )}
@@ -117,8 +136,8 @@ const CreateUser = ({ handleClose, isEditing }: IProps) => {
               </div>
               <div className=" w-[100%] mt-8">
                 <CustomButton
-                  text="Register User"
-                  isLoading={isPending}
+                  text={isEditing ? "Edit User" : "Register User"}
+                  isLoading={isPending || isEditingPending}
                   disabled={isPending}
                 />
               </div>

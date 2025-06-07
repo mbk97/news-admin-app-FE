@@ -1,8 +1,7 @@
-import { FaHourglassEnd, FaRegEye, FaSearch, FaUsers } from "react-icons/fa";
+import { FaHourglassEnd, FaRegEye, FaUsers } from "react-icons/fa";
 import Card from "../common/Card";
 import React, { useState } from "react";
-import user from "../../assets/images/user.jpg";
-import { IoMdEye, IoMdNotifications } from "react-icons/io";
+import { IoMdEye } from "react-icons/io";
 import CustomTable from "../common/CustomTable";
 import { IconButton, Tooltip } from "@mui/material";
 import CustomModal from "../common/CustomModal";
@@ -12,9 +11,11 @@ import { CardLoader, TableLoader, TrendingNewsLoader } from "../loaders";
 import { useNews } from "../../services/news/news";
 import { formatDate } from "../../utils/date";
 import { CellValue, NewsCategory } from "../../types/news";
+import ViewMoreComponent from "./ViewMoreComponent";
+import { getUserDetails } from "../../utils/saveData";
 
 const DashboardComponent = () => {
-  const [viewMoreData, setViewMoreData] = useState({});
+  const [viewMoreData, setViewMoreData] = useState({} as NewsCategory);
   console.log(viewMoreData);
   const [open, setOpen] = useState(false);
 
@@ -25,10 +26,10 @@ const DashboardComponent = () => {
 
   const { getDashboardStatsData, getTopPerformingNews } = useAnalyticsData();
   const { getRecentNewsForDashboard } = useNews({});
-  const { data: perfomingNewsData, isPending: perfomingNewsPending } =
+  const { data: perfomingNewsData, isFetching: perfomingNewsPending } =
     getTopPerformingNews;
   const { data: dashboardStats, isPending } = getDashboardStatsData;
-  const { data: recentNews, isPending: isNewsPending } =
+  const { data: recentNews, isFetching: isNewsPending } =
     getRecentNewsForDashboard;
 
   const performingNewsResult = perfomingNewsData?.filter(
@@ -36,7 +37,6 @@ const DashboardComponent = () => {
       return news?.views > 0;
     }
   );
-  console.log(performingNewsResult);
   const handleClose = () => setOpen(false);
 
   const column = [
@@ -118,10 +118,16 @@ const DashboardComponent = () => {
     },
   ];
 
+  console.log(viewMoreData);
+
+  const user = getUserDetails("user_data");
+
+  console.log("user", user);
+
   return (
     <React.Fragment>
       <main>
-        <div className="flex gap-5 mt-[40px] md:mt-[0px] justify-between">
+        {/* <div className="flex gap-5 mt-[40px] md:mt-[0px] justify-between">
           <section className="w-[100%] ">
             <div className="mb-[40px] ">
               <div className="w-[100%] relative">
@@ -156,7 +162,7 @@ const DashboardComponent = () => {
               </div>
             </div>
           </section>
-        </div>
+        </div> */}
         <section className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 gap-4">
           {isPending ? (
             <>
@@ -182,8 +188,8 @@ const DashboardComponent = () => {
           )}
         </section>
         <div className="my-[30px]">
-          <section className="flex gap-6 mt-2 flex-wrap md:flex-nowrap">
-            <div className="md:w-[75%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
+          <section className="flex gap-6 mt-2 flex-wrap lg:flex-nowrap">
+            <div className="lg:w-[75%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
               <h2 className="font-semibold text-[18px]">
                 Recently Created News
               </h2>
@@ -193,13 +199,13 @@ const DashboardComponent = () => {
                 <CustomTable columns={column} data={recentNews ?? []} />
               )}
             </div>
-            <div className="md:w-[25%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
+            <div className="lg:w-[25%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
               <h2 className="font-semibold text-[18px]">Trending News</h2>
 
               <div>
                 {perfomingNewsPending ? (
                   <TrendingNewsLoader />
-                ) : (
+                ) : performingNewsResult.length !== 0 ? (
                   performingNewsResult?.map(
                     (trend: {
                       _id: string;
@@ -250,6 +256,10 @@ const DashboardComponent = () => {
                       );
                     }
                   )
+                ) : (
+                  <p className="text-gray-500 font-medium text-center mt-5">
+                    No Trending News
+                  </p>
                 )}
               </div>
             </div>
@@ -257,8 +267,13 @@ const DashboardComponent = () => {
         </div>
       </main>
 
-      <CustomModal open={open} handleClose={handleClose} width="lg">
-        <div>hello</div>
+      <CustomModal
+        open={open}
+        handleClose={handleClose}
+        width="sm"
+        dialogTitle="View More"
+      >
+        <ViewMoreComponent viewMoreData={viewMoreData} />
       </CustomModal>
     </React.Fragment>
   );

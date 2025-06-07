@@ -1,3 +1,4 @@
+import { LuActivity } from "react-icons/lu";
 import { ISidebarTypes } from "../types";
 import { MdDashboardCustomize } from "react-icons/md";
 import { GrAnalytics, GrArticle } from "react-icons/gr";
@@ -19,30 +20,42 @@ export const sidebarData: ISidebarTypes[] = [
     title: "Dashboard",
     Icon: MdDashboardCustomize,
     link: "/dashboard",
+    roles: ["Admin", "Editor", "Author"],
   },
   {
     id: 2,
     title: "Manage Articles",
     Icon: GrArticle,
     link: "/manage-articles",
+    roles: ["Admin", "Editor", "Author"],
   },
   {
     id: 3,
     title: "Analytics & Reports",
     Icon: GrAnalytics,
     link: "/analytics-reports",
+    roles: ["Admin", "Editor", "Author"],
   },
   {
     id: 4,
     title: "User Management",
     Icon: FaUserCog,
     link: "/user-management",
+    roles: ["Admin"],
   },
   {
     id: 5,
     title: "Settings",
     Icon: IoSettingsSharp,
     link: "/settings",
+    roles: ["Admin", "Editor", "Author"],
+  },
+  {
+    id: 6,
+    title: "Activity Log",
+    Icon: LuActivity,
+    link: "/activity-log",
+    roles: ["Admin"],
   },
 ];
 
