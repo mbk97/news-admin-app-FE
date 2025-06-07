@@ -1,9 +1,11 @@
 import { Drawer } from "@mui/material";
 import { sidebarData } from "../../utils/data";
 import { ISidebarTypes } from "../../types";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
 import logo from "../../assets/images/admin-logo.png";
+import { getUserDetails } from "../../utils/saveData";
+import { useToast } from "../../hooks/useToast";
 
 interface IProps {
   open: boolean;
@@ -11,6 +13,19 @@ interface IProps {
 }
 
 const Sidebar = ({ open, handleClose }: IProps) => {
+  const { toastSuccess } = useToast();
+  const user = getUserDetails("user_data");
+  const userRole = user?.role || "";
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    console.log("Logging out...");
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+    toastSuccess("Logged out successfully");
+  };
+
   return (
     <div>
       <Drawer
@@ -35,8 +50,9 @@ const Sidebar = ({ open, handleClose }: IProps) => {
           </div>
 
           <div className="mb-[40px] border-b pb-5">
-            {sidebarData.map(({ id, title, Icon, link }: ISidebarTypes) => {
-              return (
+            {sidebarData
+              .filter((item) => item.roles!.includes(userRole))
+              .map(({ id, title, Icon, link }) => (
                 <NavLink
                   to={link}
                   key={id}
@@ -47,18 +63,15 @@ const Sidebar = ({ open, handleClose }: IProps) => {
                       : "flex h-[50px] items-center gap-3 px-1 mb-2 text-white"
                   }
                 >
-                  <div
-                    className={`flex  h-[50px] items-center gap-3 px-1 mb-2 `}
-                  >
+                  <div className="flex h-[50px] items-center gap-3 px-1 mb-2">
                     <Icon size={20} />
                     <p>{title}</p>
                   </div>
                 </NavLink>
-              );
-            })}
+              ))}
           </div>
 
-          <div className="mt-[50px]">
+          <div className="mt-[50px]" onClick={handleLogout}>
             <div
               className={`flex  h-[50px] items-center gap-3 px-1 mb-2 text-white cursor-pointer`}
             >
@@ -106,7 +119,7 @@ const Sidebar = ({ open, handleClose }: IProps) => {
             })}
           </div>
 
-          <div className="mt-[50px]">
+          <div className="mt-[50px]" onClick={handleLogout}>
             <div
               className={`flex  h-[50px] items-center gap-3 px-1 mb-2 text-white cursor-pointer`}
             >

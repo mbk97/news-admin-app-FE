@@ -4,7 +4,7 @@ import {
   IUserPayload,
   userService,
 } from "../api/userService";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCustomErrorMessage } from "../../utils/error";
 import { get_roles_key } from "./roleKey";
 import { GetUserActivitiesPayload } from "../../types/auth";
@@ -22,8 +22,8 @@ const useUserManagement = ({
   fullname,
   searchParamsForPagination,
 }: IUserManagementProps) => {
+  const queryClient = useQueryClient();
   const { toastError, toastSuccess } = useToast();
-  //   const navigate = useNavigate()
 
   const registerUserMutation = useMutation({
     mutationFn: async (user: IUserPayload) => {
@@ -69,12 +69,11 @@ const useUserManagement = ({
   const getAllUsers = useQuery({
     queryKey: ["users", roleName, fullname],
     queryFn: async () => userService.getAllUsers({ roleName, fullname }),
-    // enabled: false, // Only run if neither roleName nor fullname is provided
-    refetchOnWindowFocus: false,
     select(data) {
       return data.data.data;
     },
   });
+
   const modifyUserStatus = useMutation({
     mutationFn: async (id: string) => {
       return userService.modifyUserStatus(id);
@@ -82,8 +81,10 @@ const useUserManagement = ({
     onSuccess(data) {
       toastSuccess(data.data.message);
       handleClose?.();
-      getAllUsers.refetch();
-      getAllUserUnderRole.refetch();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.invalidateQueries(["users", roleName, fullname] as any);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.invalidateQueries(["roleName"] as any);
     },
     onError(error) {
       const errorMsg = getCustomErrorMessage(error);

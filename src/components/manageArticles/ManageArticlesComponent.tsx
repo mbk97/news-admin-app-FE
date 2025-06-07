@@ -18,6 +18,9 @@ import { useNews } from "../../services/news/news";
 import { TableLoader } from "../loaders";
 import { CellValue, IfilterNewsPayload, NewsCategory } from "../../types/news";
 import { useToast } from "../../hooks/useToast";
+import { isAuthorized } from "../../utils/saveData";
+import { ROLES } from "../../constants/role";
+import { FaBan } from "react-icons/fa";
 
 const ManageArticlesComponent = () => {
   const { toastError } = useToast();
@@ -101,34 +104,43 @@ const ManageArticlesComponent = () => {
           <IconButton
             onClick={() => {
               handleOpenViewMore(value.cell.row.original);
-              console.log(value.cell.row.original);
             }}
           >
             <Tooltip title="Edit User" arrow>
               <IoMdEye className="primary" />
             </Tooltip>
           </IconButton>
-          <IconButton
-            onClick={() => {
-              handleOpenDelete(value.cell.row.original);
-            }}
-          >
-            <Tooltip title="Edit User" arrow>
-              <MdDelete className="danger" />
-            </Tooltip>
-          </IconButton>
-          {!value.cell.row.original.publish ? (
-            <div
+          {isAuthorized([ROLES.ADMIN]) ? (
+            <IconButton
               onClick={() => {
-                handleOpenPublish(value.cell.row.original);
+                handleOpenDelete(value.cell.row.original);
               }}
             >
-              <p className="bg-yellow-300 text-black p-1 rounded-md cursor-pointer hover:bg-yellow-400 transition-all duration-200">
-                Publish Here
-              </p>
-            </div>
+              <Tooltip title="Edit User" arrow>
+                <MdDelete className="danger" />
+              </Tooltip>
+            </IconButton>
+          ) : null}
+          {isAuthorized([ROLES.ADMIN]) ? (
+            <>
+              {!value.cell.row.original.publish ? (
+                <div
+                  onClick={() => {
+                    handleOpenPublish(value.cell.row.original);
+                  }}
+                >
+                  <p className="bg-yellow-300 text-black p-1 rounded-md cursor-pointer hover:bg-yellow-400 transition-all duration-200">
+                    Publish Here
+                  </p>
+                </div>
+              ) : (
+                <p className="bg-green-400 p-1 text-white rounded-md">
+                  Published
+                </p>
+              )}
+            </>
           ) : (
-            <p className="bg-green-400 p-1 text-white rounded-md">Published</p>
+            <FaBan className="text-error" size={20} />
           )}
         </div>
       ),
@@ -174,11 +186,13 @@ const ManageArticlesComponent = () => {
         <div className="mt-10">
           <div className="flex items-center justify-between">
             <HeaderText text="Manage Blogs" />
-            <CustomButton
-              text="Create blog"
-              className="w-[120px] h-[40px]"
-              handleClick={handleOpenCreate}
-            />
+            {
+              <CustomButton
+                text="Create blog"
+                className="w-[120px] h-[40px]"
+                handleClick={handleOpenCreate}
+              />
+            }
           </div>
           <section className="mt-8  bg-white rounded-md p-5 grid grid-cols-1 lg:grid-cols-4 gap-8">
             <CustomInput
