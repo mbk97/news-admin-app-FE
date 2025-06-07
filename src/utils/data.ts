@@ -46,7 +46,7 @@ export const sidebarData: ISidebarTypes[] = [
     link: "/settings",
   },
   {
-    id: 5,
+    id: 6,
     title: "Activity Log",
     Icon: LuActivity,
     link: "/activity-log",

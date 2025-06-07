@@ -1,10 +1,10 @@
-import { MdDelete } from "react-icons/md";
+// import { MdDelete } from "react-icons/md";
 import { CustomButton } from "../../common/CustomButton";
 import CustomInput from "../../common/CustomInput";
 import HeaderText from "../../common/HeaderText";
-import { useState } from "react";
-import { Modal } from "../../common/Modal";
-import DeleteCategory from "./DeleteCategory";
+// import { useState } from "react";
+// import { Modal } from "../../common/Modal";
+// import DeleteCategory from "./DeleteCategory";
 // import { BsFillSendCheckFill } from "react-icons/bs";
 // import { MdOutlineCancel } from "react-icons/md";
 import { useCategoryManagement } from "../../../services/categories/categories";
@@ -14,17 +14,17 @@ const CategorySettings = () => {
   const { getCategories } = useCategoryManagement();
 
   const { data: categoryData, isPending: categoryLoading } = getCategories;
-  const [editingCategoryId, setEditingCategoryId] = useState("");
-  const [openDelete, setOpenDelete] = useState(false);
-  const [editedValue, setEditedValue] = useState<string>("");
+  // const [editingCategoryId, setEditingCategoryId] = useState("");
+  // const [openDelete, setOpenDelete] = useState(false);
+  // const [editedValue, setEditedValue] = useState<string>("");
 
-  const handleOpenDelete = (_id: string) => {
-    setOpenDelete(true);
-    setEditingCategoryId(_id);
-  };
-  const handleCloseDelete = () => {
-    setOpenDelete(false);
-  };
+  // const handleOpenDelete = (_id: string) => {
+  //   setOpenDelete(true);
+  //   setEditingCategoryId(_id);
+  // };
+  // const handleCloseDelete = () => {
+  //   setOpenDelete(false);
+  // };
 
   // const handleEdit = ({
   //   id,
@@ -86,7 +86,7 @@ const CategorySettings = () => {
                     className="h-[48px] flex items-center justify-between bg-white shadow-md rounded-md p-2 mb-[20px] w-[100%] lg:w-[65%] border"
                     key={_id}
                   >
-                    {editingCategoryId === _id ? (
+                    {/* {editingCategoryId === _id ? (
                       <CustomInput
                         type="text"
                         value={editedValue}
@@ -94,27 +94,14 @@ const CategorySettings = () => {
                         handleChange={(e) => setEditedValue(e.target.value)}
                         className="h-[38px]"
                       />
-                    ) : (
-                      <p className=" font-medium">{categoryName}</p>
-                    )}
+                    ) : ( */}
+                    <p className=" font-medium">{categoryName}</p>
+                    {/* )} */}
                     <div className="flex items-center gap-2">
-                      {/* <MdEdit
-                        className="text-primary cursor-pointer"
-                        onClick={() => handleEdit({ _id, categoryName })}
-                      /> */}
-                      {/* {editingCategoryId === id && (
-                        <MdOutlineCancel
-                          className="text-error cursor-pointer"
-                          onClick={cancelEdit}
-                        />
-                      )} */}
-                      <MdDelete
+                      {/* <MdDelete
                         className="text-error cursor-pointer"
                         onClick={() => handleOpenDelete(_id)}
-                      />
-                      {/* {editingCategoryId === id && (
-                        <BsFillSendCheckFill className="text-[#77ed77] cursor-pointer" />
-                      )} */}
+                      /> */}
                     </div>
                   </div>
                 );
@@ -123,12 +110,12 @@ const CategorySettings = () => {
           )}
         </div>
       </section>
-      <Modal isOpen={openDelete} onClose={handleCloseDelete}>
+      {/* <Modal isOpen={openDelete} onClose={handleCloseDelete}>
         <DeleteCategory
           handleCloseDelete={handleCloseDelete}
-          // deleteId={editingCategoryId}
+          deleteId={editingCategoryId}
         />
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// import { useNavigate } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
 import {
   ICreateRolePayload,
@@ -68,10 +67,48 @@ const useUserManagement = ({
   });
 
   const getAllUsers = useQuery({
-    queryKey: ["users"],
+    queryKey: ["users", roleName, fullname],
     queryFn: async () => userService.getAllUsers({ roleName, fullname }),
+    // enabled: false, // Only run if neither roleName nor fullname is provided
+    refetchOnWindowFocus: false,
     select(data) {
       return data.data.data;
+    },
+  });
+  const modifyUserStatus = useMutation({
+    mutationFn: async (id: string) => {
+      return userService.modifyUserStatus(id);
+    },
+    onSuccess(data) {
+      toastSuccess(data.data.message);
+      handleClose?.();
+      getAllUsers.refetch();
+      getAllUserUnderRole.refetch();
+    },
+    onError(error) {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(errorMsg);
+    },
+  });
+
+  const editUserMutation = useMutation({
+    mutationFn: async (payload: {
+      id: string;
+      fullname: string;
+      roleName: string;
+    }) => {
+      const { id, ...userData } = payload;
+      return userService.updateUser(id, userData);
+    },
+    onSuccess(data) {
+      toastSuccess(data.data.message);
+      handleClose?.();
+      getAllUsers.refetch();
+      getAllUserUnderRole.refetch();
+    },
+    onError(error) {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(errorMsg);
     },
   });
 
@@ -90,7 +127,9 @@ const useUserManagement = ({
     getAllUserUnderRole,
     createUserRoleMutation,
     getAllUsers,
+    modifyUserStatus,
     fetchUserActivities,
+    editUserMutation,
   };
 };
 

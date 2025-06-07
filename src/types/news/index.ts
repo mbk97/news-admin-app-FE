@@ -27,3 +27,13 @@ export type CellValue = {
     };
   };
 };
+
+export interface IfilterNewsPayload {
+  newsTitle: string;
+  category: string;
+  createdBy: string;
+  dateFrom: string;
+  dateTo: string;
+  pageNo: number;
+  pageSize: number;
+}

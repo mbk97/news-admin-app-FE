@@ -12,9 +12,10 @@ import { CardLoader, TableLoader, TrendingNewsLoader } from "../loaders";
 import { useNews } from "../../services/news/news";
 import { formatDate } from "../../utils/date";
 import { CellValue, NewsCategory } from "../../types/news";
+import ViewMoreComponent from "./ViewMoreComponent";
 
 const DashboardComponent = () => {
-  const [viewMoreData, setViewMoreData] = useState({});
+  const [viewMoreData, setViewMoreData] = useState({} as NewsCategory);
   console.log(viewMoreData);
   const [open, setOpen] = useState(false);
 
@@ -36,7 +37,6 @@ const DashboardComponent = () => {
       return news?.views > 0;
     }
   );
-  console.log(performingNewsResult);
   const handleClose = () => setOpen(false);
 
   const column = [
@@ -117,6 +117,8 @@ const DashboardComponent = () => {
       cardType: "",
     },
   ];
+
+  console.log(viewMoreData);
 
   return (
     <React.Fragment>
@@ -261,8 +263,13 @@ const DashboardComponent = () => {
         </div>
       </main>
 
-      <CustomModal open={open} handleClose={handleClose} width="lg">
-        <div>hello</div>
+      <CustomModal
+        open={open}
+        handleClose={handleClose}
+        width="sm"
+        dialogTitle="View More"
+      >
+        <ViewMoreComponent viewMoreData={viewMoreData} />
       </CustomModal>
     </React.Fragment>
   );

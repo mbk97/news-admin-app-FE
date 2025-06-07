@@ -6,6 +6,10 @@ export interface IUserPayload {
   email: string;
   roleName: string;
 }
+interface IEditUserPayload {
+  fullname: string;
+  roleName: string;
+}
 
 export interface IAllUserRole {
   roleName: string;
@@ -30,10 +34,11 @@ export const userService = {
   createRole: (payload: ICreateRolePayload) =>
     apiClient.post("/news-app-roles/create-role", payload),
 
-  updateUser: (id: string, payload: Partial<IUserPayload>) =>
-    apiClient.put(`/users/${id}`, payload),
+  updateUser: (id: string, payload: IEditUserPayload) =>
+    apiClient.put(`/news-app-auth/edit-user/${id}`, payload),
 
-  deleteUser: (id: string) => apiClient.delete(`/users/${id}`),
+  modifyUserStatus: (id: string) =>
+    apiClient.put(`/news-app-auth/modify-user-status/${id}`),
 
   getUserActivities: (payload: GetUserActivitiesPayload) =>
     apiClient.get(`/news-app-auth/activity-logs`, {

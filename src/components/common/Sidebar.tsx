@@ -3,6 +3,7 @@ import { sidebarData } from "../../utils/data";
 import { ISidebarTypes } from "../../types";
 import { NavLink } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
+import logo from "../../assets/images/admin-logo.png";
 
 interface IProps {
   open: boolean;
@@ -25,9 +26,15 @@ const Sidebar = ({ open, handleClose }: IProps) => {
         }}
       >
         <nav className="p-8">
-          <h1>LOGO</h1>
+          <div className="">
+            <img
+              src={logo}
+              alt="Logo"
+              className="object-cover h-[80px] w-[180px]"
+            />
+          </div>
 
-          <div className="my-[40px] border-b pb-5">
+          <div className="mb-[40px] border-b pb-5">
             {sidebarData.map(({ id, title, Icon, link }: ISidebarTypes) => {
               return (
                 <NavLink

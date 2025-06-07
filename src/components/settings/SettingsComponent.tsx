@@ -79,7 +79,7 @@ const SettingsComponent = () => {
             );
           })}
         </div>
-        <div className="w-[100%]  lg:w-[80%] bg-white p-3 rounded-md h-[600px] mt-8 lg:mt-0">
+        <div className="w-[100%]  lg:w-[80%] bg-white overflow-scroll p-3 rounded-md h-[600px] mt-8 lg:mt-0">
           <div className="">
             {tabData.map((tab) => {
               return (

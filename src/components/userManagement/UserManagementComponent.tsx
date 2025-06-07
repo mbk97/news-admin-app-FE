@@ -16,6 +16,7 @@ import { formatDate } from "../../utils/date";
 import { useToast } from "../../hooks/useToast";
 import CustomSelect from "../common/CustomSelect";
 import { CellValueForUsers, IUser } from "../../types";
+import { ImUserCheck } from "react-icons/im";
 
 const UserManagementComponent = () => {
   const { toastError } = useToast();
@@ -23,13 +24,15 @@ const UserManagementComponent = () => {
   const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState<IUser>();
   const [fullName, setFullName] = useState("");
   const [roleName, setRoleName] = useState("");
+
   const { getAllUsers, getRoles } = useUserManagement({
     roleName,
     fullname: fullName,
   });
+
   const { data: data, isFetching: loadingUsers } = getAllUsers;
   const { data: rolesData, isFetching: rolesPending } = getRoles;
 
@@ -103,9 +106,15 @@ const UserManagementComponent = () => {
               handleOpenBanModal(value.cell.row.original);
             }}
           >
-            <Tooltip title="Edit User" arrow>
-              <FaBan className="danger" />
-            </Tooltip>
+            {!value.cell.row.original.userStatus ? (
+              <Tooltip title="Edit User" arrow>
+                <FaBan className="danger" />
+              </Tooltip>
+            ) : (
+              <Tooltip title="Unban User" arrow>
+                <ImUserCheck className="success text-[#77ed77]" />
+              </Tooltip>
+            )}
           </IconButton>
           <IconButton
             onClick={() => {
@@ -186,12 +195,14 @@ const UserManagementComponent = () => {
           <CreateUser
             handleClose={isEditing ? handleCloseEditModal : handleCloseCreate}
             isEditing={isEditing}
+            userData={userData!}
+            rolesData={rolesData?.data?.data ?? []}
           />
         </Modal>
         <Modal isOpen={openBanModal} onClose={handleCloseBanModal}>
           <BanUser
             handleCloseBanModal={handleCloseBanModal}
-            userData={userData}
+            userData={userData!}
           />
         </Modal>
       </div>
