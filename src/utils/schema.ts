@@ -18,3 +18,10 @@ export const registerUserSchema = Yup.object().shape({
   fullname: Yup.string().required("Full Name is required").min(5),
   roleName: Yup.string().required("Role Name is required"),
 });
+
+export const generatePasswordSchema = Yup.object().shape({
+  password: Yup.string().required("Password is required").min(5),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Please confirm your password"),
+});

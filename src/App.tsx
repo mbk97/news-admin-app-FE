@@ -7,6 +7,7 @@ import ManageArticles from "./pages/ManageArticles";
 import AnalyticsAndReports from "./pages/AnalyticsAndReports";
 import UserManagement from "./pages/UserManagement";
 import Settings from "./pages/Settings";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route element={<Login />} path="/" />
         <Route element={<ForgotPassword />} path="/forgot-password" />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
         <Route
           index
           path="/dashboard"
