@@ -1,9 +1,17 @@
 import AuthLayout from "../components/layout/AuthLayout";
-import { ErrorMessage, Field, FieldProps, Formik, FormikProps } from "formik";
-import { Form, Link, useParams } from "react-router-dom";
+import {
+  ErrorMessage,
+  Field,
+  FieldProps,
+  Form,
+  Formik,
+  FormikProps,
+} from "formik";
+import { Link, useParams } from "react-router-dom";
 import CustomInput from "../components/common/CustomInput";
 import { CustomButton } from "../components/common/CustomButton";
 import { generatePasswordSchema } from "../utils/schema";
+import { useUserAuth } from "../services/auth/auth";
 
 interface FormValues {
   password: string;
@@ -15,12 +23,24 @@ const ResetPassword = () => {
     password: "",
     confirmPassword: "",
   };
+  const { resetPasswordMutation } = useUserAuth();
+  const { isPending, mutate } = resetPasswordMutation;
   const { resetToken } = useParams();
 
-  const handleSubmit = (values: FormValues) => {};
+  const handleSubmit = (values: FormValues) => {
+    const payload = {
+      password: values.password,
+      token: resetToken || "",
+    };
+    mutate(payload);
+  };
+
   return (
     <div>
       <AuthLayout>
+        <p className="text-center text-[18px]  font-semibold">
+          Set New Password
+        </p>
         <Formik
           initialValues={userData}
           validationSchema={generatePasswordSchema}
@@ -36,7 +56,7 @@ const ResetPassword = () => {
                         labelStyle="text-sm font-medium"
                         type="password"
                         name={field.name}
-                        value={field.value}
+                        value={field.value.trim()}
                         handleChange={handleChange}
                         placeholder="Enter new password"
                         label="New Password"
@@ -49,13 +69,6 @@ const ResetPassword = () => {
                   component="div"
                   className="text-error text-sm"
                 />
-                <div className="flex justify-end">
-                  <Link to={"/"}>
-                    <p className="text-[12px]  underline text-primary cursor-pointer">
-                      Login
-                    </p>
-                  </Link>
-                </div>
               </div>
               <div className="mt-5 lg:w-[50%] w-[80%]">
                 <Field name="confirmPassword">
@@ -65,7 +78,7 @@ const ResetPassword = () => {
                         labelStyle="text-sm font-medium"
                         type="password"
                         name={field.name}
-                        value={field.value}
+                        value={field.value.trim()}
                         handleChange={handleChange}
                         placeholder="Confirm new password"
                         label="Confirm Password"
@@ -90,8 +103,8 @@ const ResetPassword = () => {
               <div className="mt-7 w-[80%] lg:w-[50%]">
                 <CustomButton
                   text="Set Password"
-                  //   isLoading={isPending}
-                  //   disabled={isPending}
+                  isLoading={isPending}
+                  disabled={isPending}
                 />
               </div>
             </Form>

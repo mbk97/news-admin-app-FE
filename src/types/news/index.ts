@@ -13,6 +13,7 @@ export type NewsCategory = {
   newsTitle: string;
   newsBody: string;
   newsImage: string;
+  subHeadline?: string; // Optional subheadline
   publish: boolean;
   views: number;
   viewDates: string[]; // Array of ISO date strings

@@ -9,24 +9,20 @@ import ManageArticles from "./pages/ManageArticles";
 import AnalyticsAndReports from "./pages/AnalyticsAndReports";
 import UserManagement from "./pages/UserManagement";
 import Settings from "./pages/Settings";
-<<<<<<< HEAD
-import ResetPassword from "./pages/ResetPassword";
-=======
 import AuditLog from "./pages/AuditLog";
 import Unauthorized from "./pages/Unauthorized";
 // Route Guard
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { ROLES } from "./constants/role";
->>>>>>> 51fe7937a731a377e2fb91acdab5c6367e00b930
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
     <div>
       <Routes>
-<<<<<<< HEAD
         <Route element={<Login />} path="/" />
         <Route element={<ForgotPassword />} path="/forgot-password" />
-        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
+        <Route element={<ResetPassword />} path="/reset-password/:resetToken" />
         <Route
           index
           path="/dashboard"
@@ -72,7 +68,6 @@ function App() {
             // </ProtectedRoute>
           }
         />
-=======
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -93,7 +88,6 @@ function App() {
             <Route path="/activity-log" element={<AuditLog />} />
           </Route>
         </Route>
->>>>>>> 51fe7937a731a377e2fb91acdab5c6367e00b930
       </Routes>
     </div>
   );

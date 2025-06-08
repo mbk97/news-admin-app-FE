@@ -20,9 +20,6 @@ const AuthLayout = ({ children }: IProps) => {
             alt="Logo"
             className="h-[150px] object-cover object-center"
           />
-          <p className="text-center text-[14px] font-semibold">
-            Please login to access the admin features and manage your blog.
-          </p>
         </div>
         <div className="lg:w-[100%] w-[100%]">{children}</div>
       </div>

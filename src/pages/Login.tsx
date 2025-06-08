@@ -33,6 +33,7 @@ const Login = () => {
 
   return (
     <AuthLayout>
+      <p className="text-center text-[18px]  font-semibold">Welcome back</p>
       <Formik
         initialValues={userData}
         validationSchema={validationSchema}

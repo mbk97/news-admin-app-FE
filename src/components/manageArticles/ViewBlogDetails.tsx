@@ -23,6 +23,14 @@ const ViewBlogDetails = ({ data }: IProps) => {
         />
       </div>
 
+      {data.subHeadline && (
+        <div className="mt-6">
+          <p className="my-[10px] font-semibold">Sub Headline</p>
+          <div className="border h-auto w-full p-2 rounded-sm">
+            <p className="text-sm">{data.subHeadline}</p>
+          </div>
+        </div>
+      )}
       <div className="mt-6">
         <p className="my-[10px] font-semibold">Blog Content</p>
         <div className="border h-auto w-full p-2 rounded-sm">

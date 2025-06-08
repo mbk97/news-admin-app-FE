@@ -36,3 +36,8 @@ export interface IRole {
   updatedAt: string;
   __v: number;
 }
+
+export type IResetPayload = {
+  password: string;
+  token: string;
+};

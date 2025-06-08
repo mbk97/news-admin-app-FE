@@ -10,7 +10,7 @@ import CustomTable from "../common/CustomTable";
 import CreateArticles from "./CreateArticles";
 import ViewBlogDetails from "./ViewBlogDetails";
 import CustomDrawer from "../common/CustomDrawer";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 import { Modal } from "../common/Modal";
 import DeleteBlog from "./DeleteBlog";
 import PublishBlog from "./PublishBlog";
@@ -29,6 +29,7 @@ const ManageArticlesComponent = () => {
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openPublish, setOpenPublish] = useState<boolean>(false);
   const [viewMoreData, setOpenViewMoreData] = useState<NewsCategory>();
+  const [openEditModal, setOpenEditModal] = useState(false);
   const [inputData, setInputData] = useState<IfilterNewsPayload>({
     newsTitle: "",
     category: "",
@@ -49,6 +50,15 @@ const ManageArticlesComponent = () => {
   const totalItems = newsData?.totalItems;
   const tableData = newsData?.data || [];
 
+  const handleOpenEdit = (data: NewsCategory) => {
+    setOpenEditModal(true);
+    setOpenViewMoreData(data);
+  };
+  const handleCloseEdit = () => {
+    setOpenEditModal(false);
+    setOpenViewMoreData(undefined);
+  };
+
   const handleOpenPublish = (data: NewsCategory) => {
     setOpenPublish(true);
     setOpenViewMoreData(data);
@@ -61,6 +71,7 @@ const ManageArticlesComponent = () => {
   const handleOpenViewMore = (data: NewsCategory) => {
     setOpenViewMore(true);
     setOpenViewMoreData(data);
+    setOpenEditModal(false);
   };
   const handleCloseViewMore = () => {
     setOpenViewMore(false);
@@ -106,8 +117,17 @@ const ManageArticlesComponent = () => {
               handleOpenViewMore(value.cell.row.original);
             }}
           >
-            <Tooltip title="Edit User" arrow>
+            <Tooltip title="View More" arrow>
               <IoMdEye className="primary" />
+            </Tooltip>
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              handleOpenEdit(value.cell.row.original);
+            }}
+          >
+            <Tooltip title="Edit Modal" arrow>
+              <MdEdit className="primary" />
             </Tooltip>
           </IconButton>
           {isAuthorized([ROLES.ADMIN]) ? (
@@ -342,12 +362,16 @@ const ManageArticlesComponent = () => {
         </div>
 
         <CustomModal
-          open={openCreate}
-          dialogTitle="Create Blog"
+          open={openCreate ? openCreate : openEditModal}
+          dialogTitle={openCreate ? "Create Blog" : "Edit Blog"}
+          handleClose={openCreate ? handleCloseCreate : handleCloseEdit}
           width="md"
-          handleClose={handleCloseCreate}
         >
-          <CreateArticles handleCloseCreate={handleCloseCreate} />
+          <CreateArticles
+            handleCloseCreate={handleCloseCreate}
+            isEditing={openEditModal}
+            editData={viewMoreData!}
+          />
         </CustomModal>
         <CustomDrawer
           open={openViewMore}

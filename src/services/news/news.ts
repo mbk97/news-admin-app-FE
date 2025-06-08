@@ -68,12 +68,32 @@ const useNews = ({ handleClose, filterParamsForNews }: IProps) => {
     },
   });
 
+  const updateNews = useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: ICreateNewsPayload;
+    }) => newsService.updateNews(id, payload),
+    onSuccess(data) {
+      toastSuccess(data.data.message);
+      handleClose?.();
+      fetchAllAvailableNews.refetch();
+    },
+    onError(error) {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(errorMsg);
+    },
+  });
+
   return {
     createNewsMutation,
     fetchAllAvailableNews,
     publishNews,
     getRecentNewsForDashboard,
     deleteNews,
+    updateNews,
   };
 };
 

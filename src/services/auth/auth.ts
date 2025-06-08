@@ -2,7 +2,11 @@ import { saveUserDetails } from "./../../utils/saveData";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../../hooks/useToast";
 import { getCustomErrorMessage } from "../../utils/error";
-import { ILoginPayload, IUpdatePassword } from "../../types/auth";
+import {
+  ILoginPayload,
+  IResetPayload,
+  IUpdatePassword,
+} from "../../types/auth";
 import { authService } from "../api/authService";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
@@ -48,11 +52,25 @@ const useUserAuth = () => {
       toastError(`Password Reset Error: ${errorMsg}`);
     },
   });
+  const resetPasswordMutation = useMutation({
+    mutationFn: (payload: IResetPayload) => authService.resetPassword(payload),
+
+    onSuccess: (data) => {
+      toastSuccess(data?.data?.message || "Password reset successfully.");
+      navigate("/");
+    },
+
+    onError: (error: AxiosError) => {
+      const errorMsg = getCustomErrorMessage(error);
+      toastError(`Password Reset Error: ${errorMsg}`);
+    },
+  });
 
   return {
     loginUserMutation,
     updatePasswordMutation,
     forgotPasswordMutation,
+    resetPasswordMutation,
   };
 };
 

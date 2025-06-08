@@ -7,37 +7,51 @@ import { CustomButton } from "../common/CustomButton";
 import { useNews } from "../../services/news/news";
 import { useCategoryManagement } from "../../services/categories/categories";
 import CustomSelect from "../common/CustomSelect";
+import { NewsCategory } from "../../types/news";
 interface IProps {
   handleCloseCreate: () => void;
+  isEditing?: boolean;
+  editData: NewsCategory;
 }
 
-const CreateArticles = ({ handleCloseCreate }: IProps) => {
-  const { createNewsMutation } = useNews({ handleClose: handleCloseCreate });
+const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
+  const { createNewsMutation, updateNews } = useNews({
+    handleClose: handleCloseCreate,
+  });
   const { getCategories } = useCategoryManagement();
   const { data: categoryData, isPending: loadingCat } = getCategories;
   const { mutate, isPending } = createNewsMutation;
-  const [newsContent, setNewsContent] = useState("");
+  const { mutate: updateMutate, isPending: isUpdatePending } = updateNews;
+  const [newsContent, setNewsContent] = useState(
+    editData ? editData.newsBody : ""
+  );
   console.log(categoryData);
   const [inputData, setInputData] = useState({
-    title: "",
-    content: "",
-    category: "",
-    imageUrl: "",
-    author: "",
+    title: editData?.newsTitle || "",
+    subHeadline: editData?.subHeadline || "",
+    category: editData?.category || "",
+    imageUrl: editData?.newsImage || "",
+    author: editData?.createdBy || "",
   });
 
-  const { title, category, imageUrl, author } = inputData;
+  const { title, category, imageUrl, author, subHeadline } = inputData;
 
   const handleCreateBlog = () => {
     const payload = {
       newsTitle: title,
+      subHeadline,
       newsBody: newsContent,
       category,
       newsImage: imageUrl,
       createdBy: author,
       publish: false,
     };
-    mutate(payload);
+
+    if (isEditing) {
+      updateMutate({ id: editData._id!, payload });
+    } else {
+      mutate(payload);
+    }
   };
   return (
     <div className="">
@@ -51,6 +65,18 @@ const CreateArticles = ({ handleCloseCreate }: IProps) => {
             name="title"
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setInputData({ ...inputData, title: e.target.value });
+            }}
+          />
+        </div>
+        <div className="md:w-[400px] w-[100%]">
+          <CustomInput
+            type="text"
+            placeholder="Enter Sub Headline"
+            label="Sub Headline"
+            value={subHeadline}
+            name="subHeadline"
+            handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setInputData({ ...inputData, subHeadline: e.target.value });
             }}
           />
         </div>
@@ -110,9 +136,17 @@ const CreateArticles = ({ handleCloseCreate }: IProps) => {
         <CustomButton
           handleClick={handleCreateBlog}
           className="md:w-[300px] mt-[70px]"
-          text="Create Blog"
-          isLoading={isPending}
-          disabled={isPending}
+          text={isEditing ? "Update Blog" : "Create Blog"}
+          isLoading={isPending || isUpdatePending}
+          disabled={
+            isPending ||
+            isUpdatePending ||
+            !title ||
+            !newsContent ||
+            !category ||
+            !imageUrl ||
+            !author
+          }
         />
       </div>
     </div>
