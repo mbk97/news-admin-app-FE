@@ -4,6 +4,7 @@ export interface ISidebarTypes {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Icon: any;
   link: string;
+  roles?: string[]; // Optional property for role-based access
 }
 
 export interface IRoles {

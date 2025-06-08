@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from "axios";
+import { getUserDetails } from "../../utils/saveData";
+
+const redirectToLogin = () => {
+  localStorage.clear(); // You should implement this to clear localStorage/session
+  window.location.href = "/login";
+};
 
 // Create a base API client
 const createApiClient = (): AxiosInstance => {
@@ -13,13 +19,23 @@ const createApiClient = (): AxiosInstance => {
 
   // Add request interceptor for auth token
   client.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = getUserDetails("user_data")?.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   });
 
+  // Add response interceptor to catch 401 errors
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        redirectToLogin();
+      }
+      return Promise.reject(error);
+    }
+  );
   return client;
 };
 
