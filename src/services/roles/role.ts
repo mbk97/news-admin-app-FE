@@ -32,6 +32,8 @@ const useUserManagement = ({
     },
     onSuccess(data) {
       toastSuccess(data.data.message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      queryClient.invalidateQueries(["users", roleName, fullname] as any);
       handleClose?.();
     },
     onError(error) {

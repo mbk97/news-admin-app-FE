@@ -18,8 +18,6 @@ const DashboardLayout = ({ children }: IProps) => {
   };
   const user = getUserDetails("user_data");
 
-  console.log("user", user);
-
   return (
     <div className="flex relative">
       <div className="w-[0%] lg:w-[20%]">

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ICreateNewsPayload, newsService } from "../api/newsService";
 import { useToast } from "../../hooks/useToast";
 import { getCustomErrorMessage } from "../../utils/error";
@@ -11,6 +11,7 @@ interface IProps {
 
 const useNews = ({ handleClose, filterParamsForNews }: IProps) => {
   const { toastError, toastSuccess } = useToast();
+  const queryClient = useQueryClient();
 
   const createNewsMutation = useMutation({
     mutationFn: (payload: ICreateNewsPayload) =>
@@ -27,7 +28,7 @@ const useNews = ({ handleClose, filterParamsForNews }: IProps) => {
   });
 
   const fetchAllAvailableNews = useQuery({
-    queryKey: ["allNews"],
+    queryKey: ["allNews", filterParamsForNews],
     queryFn: () => newsService.getAllNews(filterParamsForNews!),
     select(data) {
       return data.data;
@@ -47,7 +48,7 @@ const useNews = ({ handleClose, filterParamsForNews }: IProps) => {
     onSuccess(data) {
       toastSuccess(data.data.message);
       handleClose?.();
-      fetchAllAvailableNews.refetch();
+      queryClient.invalidateQueries(["allNews"] as never);
     },
     onError(error) {
       const errorMsg = getCustomErrorMessage(error);

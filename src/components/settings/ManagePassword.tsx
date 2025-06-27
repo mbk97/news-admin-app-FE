@@ -12,8 +12,10 @@ import HeaderText from "../common/HeaderText";
 import { IUpdatePassword } from "../../types/auth";
 import { updatePasswordSchema } from "../../utils/schema";
 import { useUserAuth } from "../../services/auth/auth";
+import { getUserDetails } from "../../utils/saveData";
 
 const ManagePassword = () => {
+  const user = getUserDetails("user_data");
   const { updatePasswordMutation } = useUserAuth();
   const { isPending, mutate } = updatePasswordMutation;
 
@@ -24,7 +26,12 @@ const ManagePassword = () => {
   };
 
   const handleSubmit = (values: IUpdatePassword) => {
-    mutate(values);
+    const payload = {
+      email: user?.email,
+      currentPassword: values.currentPassword,
+      newPassword: values.newPassword,
+    };
+    mutate(payload);
   };
 
   return (
@@ -46,7 +53,8 @@ const ManagePassword = () => {
                         labelStyle="text-sm font-medium"
                         type="email"
                         name={field.name}
-                        value={field.value}
+                        value={user?.email}
+                        disabled={true}
                         handleChange={handleChange}
                         placeholder="Enter your email"
                         label="Email Address"
@@ -66,7 +74,7 @@ const ManagePassword = () => {
                     <div className="relative mb-4">
                       <CustomInput
                         labelStyle="text-sm font-medium"
-                        type="text"
+                        type="password"
                         name={field.name}
                         value={field.value}
                         handleChange={handleChange}
@@ -88,7 +96,7 @@ const ManagePassword = () => {
                     <div className="relative mb-4">
                       <CustomInput
                         labelStyle="text-sm font-medium"
-                        type="text"
+                        type="password"
                         name={field.name}
                         value={field.value}
                         handleChange={handleChange}

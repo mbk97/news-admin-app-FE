@@ -8,6 +8,7 @@ import { useNews } from "../../services/news/news";
 import { useCategoryManagement } from "../../services/categories/categories";
 import CustomSelect from "../common/CustomSelect";
 import { NewsCategory } from "../../types/news";
+import { getUserDetails } from "../../utils/saveData";
 interface IProps {
   handleCloseCreate: () => void;
   isEditing?: boolean;
@@ -15,6 +16,9 @@ interface IProps {
 }
 
 const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
+  const user = getUserDetails("user_data");
+  console.log("user", user);
+
   const { createNewsMutation, updateNews } = useNews({
     handleClose: handleCloseCreate,
   });
@@ -25,13 +29,12 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
   const [newsContent, setNewsContent] = useState(
     editData ? editData.newsBody : ""
   );
-  console.log(categoryData);
   const [inputData, setInputData] = useState({
     title: editData?.newsTitle || "",
     subHeadline: editData?.subHeadline || "",
     category: editData?.category || "",
     imageUrl: editData?.newsImage || "",
-    author: editData?.createdBy || "",
+    author: editData?.createdBy || user?.fullname,
   });
 
   const { title, category, imageUrl, author, subHeadline } = inputData;
@@ -114,6 +117,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             label="Created By"
             value={author}
             name="author"
+            disabled={true}
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setInputData({ ...inputData, author: e.target.value });
             }}
@@ -144,8 +148,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             !title ||
             !newsContent ||
             !category ||
-            !imageUrl ||
-            !author
+            !imageUrl
           }
         />
       </div>

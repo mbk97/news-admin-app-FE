@@ -23,6 +23,10 @@ const createApiClient = (): AxiosInstance => {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // if (csrfToken) {
+    //   config.headers["CSRF-Token"] = csrfToken; // 🔐 Send CSRF token
+    // }
     return config;
   });
 

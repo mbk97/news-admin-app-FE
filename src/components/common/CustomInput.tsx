@@ -55,7 +55,7 @@ const CustomInput = ({
         onBlur={handleBlur}
         datatype=""
         className={`${className} w-[100%] text-[12px]  border-[#D1D5DB] rounded-[8px] h-[45px] outline-primary px-[20px] border ${
-          disabled ? "cursor-not-allowed bg-[#F9FAFB]" : "bg-[#f9fafb]"
+          disabled ? "cursor-not-allowed bg-[#cdd9e6]" : "bg-[#f9fafb]"
         }`}
       />
       {loading && (

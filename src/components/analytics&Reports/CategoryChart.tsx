@@ -9,9 +9,12 @@ import { ChartLoader } from "../loaders";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CategoryDoughnutChart = () => {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
   const [openFilterModalForCategory, setOpenFilterModalForCategory] =
     useState<boolean>(false);
-  const [month, setMonth] = useState(5);
+  const [month, setMonth] = useState<number>(currentMonth);
+
   const { getMonthlyCategoryViewsData } = useAnalyticsData({
     month,
   });
@@ -25,8 +28,6 @@ const CategoryDoughnutChart = () => {
   const viewCounts =
     monthlyCategory?.categories?.map((item: { views: number }) => item.views) ||
     [];
-
-  console.log(categoryNames);
 
   const getCurrentMonthName = () => {
     const months = [
@@ -76,6 +77,12 @@ const CategoryDoughnutChart = () => {
           "#FFCE56",
           "#4BC0C0",
           "#9966FF",
+          "#FF9F40",
+          "#FF69B4",
+          "#FF4500",
+          "#32CD32",
+          "#FFA07A",
+          "#8A2BE2",
         ],
         hoverOffset: 6,
       },
@@ -86,6 +93,14 @@ const CategoryDoughnutChart = () => {
     responsive: true,
     maintainAspectRatio: false,
   };
+
+  const handleMonthChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedMonth = Number(e.target.value);
+    setMonth(selectedMonth);
+    setOpenFilterModalForCategory(false);
+  };
+
+  console.log(monthlyCategory, viewCounts);
 
   return (
     <div className="">
@@ -130,7 +145,7 @@ const CategoryDoughnutChart = () => {
                 name="month"
                 id="month"
                 value={month}
-                onChange={(e) => setMonth(Number(e.target.value))}
+                onChange={handleMonthChange}
                 className="w-[100%] text-[12px] border-[#D1D5DB] rounded-[8px] h-[45px] outline-primary px-[20px] border bg-[#f9fafb]"
               >
                 {months.map((m) => (

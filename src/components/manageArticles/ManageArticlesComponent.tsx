@@ -21,6 +21,7 @@ import { useToast } from "../../hooks/useToast";
 import { isAuthorized } from "../../utils/saveData";
 import { ROLES } from "../../constants/role";
 import { FaBan } from "react-icons/fa";
+import { formatDate } from "../../utils/date";
 
 const ManageArticlesComponent = () => {
   const { toastError } = useToast();
@@ -106,6 +107,7 @@ const ManageArticlesComponent = () => {
     {
       Header: "Date Created",
       accessor: "createdAt",
+      Cell: ({ value }: { value: string }) => formatDate(value),
     },
     {
       Header: "Action",
@@ -200,6 +202,7 @@ const ManageArticlesComponent = () => {
     });
     fetchAllAvailableNews.refetch();
   };
+
   return (
     <div>
       <DashboardLayout>
@@ -368,7 +371,7 @@ const ManageArticlesComponent = () => {
           width="md"
         >
           <CreateArticles
-            handleCloseCreate={handleCloseCreate}
+            handleCloseCreate={openCreate ? handleCloseCreate : handleCloseEdit}
             isEditing={openEditModal}
             editData={viewMoreData!}
           />
