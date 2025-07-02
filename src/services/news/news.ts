@@ -61,7 +61,7 @@ const useNews = ({ handleClose, filterParamsForNews }: IProps) => {
     onSuccess(data) {
       toastSuccess(data.data.message);
       handleClose?.();
-      fetchAllAvailableNews.refetch();
+      queryClient.invalidateQueries(["allNews"] as never);
     },
     onError(error) {
       const errorMsg = getCustomErrorMessage(error);

@@ -151,12 +151,12 @@ const ManageArticlesComponent = () => {
                     handleOpenPublish(value.cell.row.original);
                   }}
                 >
-                  <p className="bg-yellow-300 text-black p-1 rounded-md cursor-pointer hover:bg-yellow-400 transition-all duration-200">
-                    Publish Here
+                  <p className="bg-yellow-300 whitespace-nowrap text-white p-1 rounded-md cursor-pointer hover:bg-yellow-400 transition-all duration-200 font-medium w-[70px] text-center">
+                    Publish
                   </p>
                 </div>
               ) : (
-                <p className="bg-green-400 p-1 text-white rounded-md">
+                <p className="bg-green-400 p-1 text-white rounded-md font-medium w-[70px] text-center">
                   Published
                 </p>
               )}

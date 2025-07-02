@@ -16,7 +16,6 @@ import { getUserDetails } from "../../utils/saveData";
 
 const DashboardComponent = () => {
   const [viewMoreData, setViewMoreData] = useState({} as NewsCategory);
-  console.log(viewMoreData);
   const [open, setOpen] = useState(false);
 
   const handleOpenViewMore = (data: NewsCategory) => {
@@ -110,7 +109,7 @@ const DashboardComponent = () => {
     },
     {
       id: 4,
-      cardTitle: "Pending Approvals",
+      cardTitle: "Unpublished Articles",
       cardDetails: dashboardStats?.unpublishedArticles?.length,
       CardIcon: FaHourglassEnd,
       cardSubtitle: "",
@@ -118,7 +117,7 @@ const DashboardComponent = () => {
     },
   ];
 
-  console.log(viewMoreData);
+  console.log(dashboardStats, "dashboardStats");
 
   const user = getUserDetails("user_data");
 
