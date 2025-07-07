@@ -32,7 +32,7 @@ const MonthlyAnalytics = () => {
     (month: { totalViews: number[] }) => month.totalViews
   );
 
-  console.log(viewCounts);
+  const maxValues = Math.max(...viewCounts);
 
   const data = {
     labels: [
@@ -52,7 +52,7 @@ const MonthlyAnalytics = () => {
     datasets: [
       {
         label: "Monthly Views",
-        data: viewCounts.length ? viewCounts : [],
+        data: viewCounts ?? [],
         borderColor: "#1C64F2",
         pointRadius: 5,
       },
@@ -81,7 +81,7 @@ const MonthlyAnalytics = () => {
           display: false,
         },
         min: 0,
-        max: 100,
+        max: maxValues + 200,
         ticks: {
           stepSize: 20,
           padding: 30,

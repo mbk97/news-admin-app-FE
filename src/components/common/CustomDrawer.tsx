@@ -4,6 +4,7 @@ import { MdClose } from "react-icons/md";
 interface IProps {
   open: boolean;
   handleClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
   drawerTitle: string;
 }

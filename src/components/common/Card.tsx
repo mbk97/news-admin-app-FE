@@ -2,7 +2,9 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 
 interface IProps {
   cardTitle: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cardDetails: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   CardIcon: any;
   cardSubtitle: string;
   cardType?: string;

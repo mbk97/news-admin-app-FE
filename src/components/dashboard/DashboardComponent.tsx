@@ -84,7 +84,7 @@ const DashboardComponent = () => {
     {
       id: 1,
       cardTitle: "Total Views",
-      cardDetails: dashboardStats?.totalViews,
+      cardDetails: dashboardStats?.totalViews.toLocaleString(),
       CardIcon: FaRegEye,
       cardSubtitle: "Compared to (200k last month)",
       cardType: "primary",
@@ -93,7 +93,7 @@ const DashboardComponent = () => {
     {
       id: 2,
       cardTitle: "Total Articles",
-      cardDetails: dashboardStats?.totalArticles,
+      cardDetails: dashboardStats?.totalArticles.toLocaleString(),
       CardIcon: PiArticleNyTimesBold,
       cardSubtitle: "",
       cardType: "",
@@ -126,42 +126,6 @@ const DashboardComponent = () => {
   return (
     <React.Fragment>
       <main>
-        {/* <div className="flex gap-5 mt-[40px] md:mt-[0px] justify-between">
-          <section className="w-[100%] ">
-            <div className="mb-[40px] ">
-              <div className="w-[100%] relative">
-                <input
-                  type="text"
-                  className="h-[52px] bg-[#ffffff] w-[100%]  rounded-md border-[red] p-3 outline-primary"
-                  placeholder="Search"
-                />
-                <div className="absolute right-4 top-3">
-                  <FaSearch />
-                </div>
-              </div>
-            </div>
-          </section>
-          <section className="md:w-[20%] w-[0] lg:block hidden">
-            <div className="h-[52px] bg-[#ffffff] w-[100%] flex items-center justify-between  rounded-md border-[red] p-3 outline-primary">
-              <div className="border-[1.4px] p-1 rounded-[50%] border-black">
-                <img
-                  src={user}
-                  alt="user"
-                  className="h-[28px] w-[28px] rounded-[50%]"
-                />
-              </div>
-              <div>
-                <h6 className="text-[14px] font-medium">Mubarak</h6>
-                <p className="font-semibold text-[12px]">Admin</p>
-              </div>
-              <div className="relative">
-                <IoMdNotifications size={30} />
-
-                <div className="h-[7px] absolute top-1 right-2 w-[7px] bg-[red] rounded-[50%]"></div>
-              </div>
-            </div>
-          </section>
-        </div> */}
         <section className="grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 gap-4">
           {isPending ? (
             <>
@@ -198,7 +162,7 @@ const DashboardComponent = () => {
                 <CustomTable columns={column} data={recentNews ?? []} />
               )}
             </div>
-            <div className="lg:w-[25%] w-[100%] bg-white p-[15px] rounded-md h-[auto]">
+            <div className="lg:w-[25%] w-[100%] bg-white p-[15px] rounded-md h-[700px] overflow-y-scroll">
               <h2 className="font-semibold text-[18px]">Trending News</h2>
 
               <div>
