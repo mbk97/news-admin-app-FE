@@ -34,7 +34,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
     category: editData?.category || "",
     imageUrl: editData?.newsImage || "",
     author: editData?.createdBy || user?.fullname,
-    headline: editData?.headline || "false",
+    headline: editData?.headline === "true" ? "true" : "false",
   });
 
   const { title, category, imageUrl, author, subHeadline, headline } =
