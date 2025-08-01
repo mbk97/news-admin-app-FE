@@ -29,12 +29,12 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
     editData ? editData.newsBody : ""
   );
   const [inputData, setInputData] = useState({
-    title: editData?.newsTitle || "",
-    subHeadline: editData?.subHeadline || "",
-    category: editData?.category || "",
-    imageUrl: editData?.newsImage || "",
-    author: editData?.createdBy || user?.fullname,
-    headline: editData?.headline === "true" ? "true" : "false",
+    title: isEditing ? editData?.newsTitle : "",
+    subHeadline: isEditing ? editData?.subHeadline : "",
+    category: isEditing ? editData?.category : "",
+    imageUrl: isEditing ? editData?.newsImage : "",
+    author: isEditing ? editData?.createdBy : user?.fullname,
+    headline: isEditing ? editData?.headline : "false",
   });
 
   const { title, category, imageUrl, author, subHeadline, headline } =
@@ -79,7 +79,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             type="text"
             placeholder="Enter Sub Headline"
             label="Sub Headline"
-            value={subHeadline}
+            value={subHeadline!}
             name="subHeadline"
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setInputData({ ...inputData, subHeadline: e.target.value });
@@ -105,7 +105,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
               { name: "False", val: "false" },
             ]}
             label={"Headline"}
-            value={headline}
+            value={headline!}
             name={"headline"}
             handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setInputData({
