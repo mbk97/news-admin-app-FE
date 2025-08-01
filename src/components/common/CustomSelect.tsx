@@ -1,8 +1,8 @@
 import React from "react";
-import { ICategory, IRoles } from "../../types";
+import { ICategory, IHeadlineType, IRoles } from "../../types";
 
 interface ISelectProps {
-  options: IRoles[] | ICategory[];
+  options: IRoles[] | ICategory[] | IHeadlineType[];
   name: string;
   value: string;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -47,6 +47,13 @@ const CustomSelect = ({
           (options as ICategory[]).map((item) => (
             <option value={item.categoryName} key={item._id}>
               {item.categoryName}
+            </option>
+          ))}
+
+        {name === "headline" &&
+          (options as IHeadlineType[]).map((item) => (
+            <option value={item.val} key={item.val}>
+              {item.name}
             </option>
           ))}
       </select>

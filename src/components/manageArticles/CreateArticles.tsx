@@ -17,7 +17,6 @@ interface IProps {
 
 const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
   const user = getUserDetails("user_data");
-  console.log("user", user);
 
   const { createNewsMutation, updateNews } = useNews({
     handleClose: handleCloseCreate,
@@ -35,15 +34,18 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
     category: editData?.category || "",
     imageUrl: editData?.newsImage || "",
     author: editData?.createdBy || user?.fullname,
+    headline: editData?.headline || "false",
   });
 
-  const { title, category, imageUrl, author, subHeadline } = inputData;
+  const { title, category, imageUrl, author, subHeadline, headline } =
+    inputData;
 
   const handleCreateBlog = () => {
     const payload = {
       newsTitle: title,
       subHeadline,
       newsBody: newsContent,
+      headline,
       category,
       newsImage: imageUrl,
       createdBy: author,
@@ -56,10 +58,11 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
       mutate(payload);
     }
   };
+
   return (
     <div className="">
       <section className="flex justify-between flex-wrap md:flex-nowrap gap-4">
-        <div className="md:w-[400px] w-[100%]">
+        <div className="md:w-[200px] w-[100%]">
           <CustomInput
             type="text"
             placeholder="Enter Blog Title"
@@ -71,7 +74,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             }}
           />
         </div>
-        <div className="md:w-[400px] w-[100%]">
+        <div className="md:w-[200px] w-[100%]">
           <CustomInput
             type="text"
             placeholder="Enter Sub Headline"
@@ -83,7 +86,7 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             }}
           />
         </div>
-        <div className="md:w-[400px] w-[100%]">
+        <div className="md:w-[200px] w-[100%]">
           <CustomInput
             type="text"
             placeholder="Blog Image URL"
@@ -93,6 +96,24 @@ const CreateArticles = ({ handleCloseCreate, isEditing, editData }: IProps) => {
             handleChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setInputData({ ...inputData, imageUrl: e.target.value });
             }}
+          />
+        </div>
+        <div className="md:w-[200px] w-[100%]">
+          <CustomSelect
+            options={[
+              { name: "True", val: "true" },
+              { name: "False", val: "false" },
+            ]}
+            label={"Headline"}
+            value={headline}
+            name={"headline"}
+            handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setInputData({
+                ...inputData,
+                headline: e.target.value,
+              });
+            }}
+            className=""
           />
         </div>
       </section>

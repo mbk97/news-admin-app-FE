@@ -7,6 +7,7 @@ export interface ICreateNewsPayload {
   newsBody: string;
   category: string;
   newsImage?: string;
+  headline?: string;
   createdBy: string;
   publish?: boolean;
 }

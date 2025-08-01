@@ -32,6 +32,10 @@ export interface ICategory {
   updatedAt: string;
   __v: number;
 }
+export interface IHeadlineType {
+  name: string;
+  val: string;
+}
 
 export type CellValueForUsers = {
   cell: {
