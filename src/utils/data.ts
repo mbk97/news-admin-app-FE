@@ -20,21 +20,21 @@ export const sidebarData: ISidebarTypes[] = [
     title: "Dashboard",
     Icon: MdDashboardCustomize,
     link: "/dashboard",
-    roles: ["Admin", "Editor", "Author"],
+    roles: ["Admin", "Editor", "Author", "NaijaDaily"],
   },
   {
     id: 2,
     title: "Manage Articles",
     Icon: GrArticle,
     link: "/manage-articles",
-    roles: ["Admin", "Editor", "Author"],
+    roles: ["Admin", "Editor", "Author", "NaijaDaily"],
   },
   {
     id: 3,
     title: "Analytics & Reports",
     Icon: GrAnalytics,
     link: "/analytics-reports",
-    roles: ["Admin", "Editor", "Author"],
+    roles: ["Admin", "Editor", "Author", "NaijaDaily"],
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ export const sidebarData: ISidebarTypes[] = [
     title: "Settings",
     Icon: IoSettingsSharp,
     link: "/settings",
-    roles: ["Admin", "Editor", "Author"],
+    roles: ["Admin", "Editor", "Author", "NaijaDaily"],
   },
   {
     id: 6,

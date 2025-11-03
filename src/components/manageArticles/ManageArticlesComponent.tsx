@@ -143,7 +143,7 @@ const ManageArticlesComponent = () => {
               </Tooltip>
             </IconButton>
           ) : null}
-          {isAuthorized([ROLES.ADMIN]) ? (
+          {isAuthorized([ROLES.ADMIN, ROLES.NAIJADAILY]) ? (
             <>
               {!value.cell.row.original.publish ? (
                 <div
